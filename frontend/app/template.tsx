@@ -17,7 +17,7 @@ function ScrollProgress() {
   return (
     <div
       className="scroll-progress"
-      style={{ transform: `scaleX(${progress})` }}
+      style={{ transform: `scaleX(${progress})`, width: '100%' }}
     />
   );
 }
@@ -37,3 +37,4 @@ export default function Template({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+

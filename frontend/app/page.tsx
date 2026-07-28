@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import NeuralCanvas from '@/components/NeuralCanvas';
 import TiltCard from '@/components/TiltCard';
@@ -27,8 +27,8 @@ export default function HomePage() {
   const mousePosX = useMotionValue(0.5);
   const mousePosY = useMotionValue(0.5);
 
-  const blobX = useTransform(mousePosX, [0, 1], ['-30px', '30px']);
-  const blobY = useTransform(mousePosY, [0, 1], ['-20px', '20px']);
+  const blobX = useTransform(mousePosX, [0, 1], ['-15px', '15px']);
+  const blobY = useTransform(mousePosY, [0, 1], ['-10px', '10px']);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -46,20 +46,20 @@ export default function HomePage() {
 
         {/* ── HERO ─────────────────────────────────────────────── */}
         <section style={{ minHeight: '94vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '80px 24px', position: 'relative', overflow: 'hidden' }}>
-          {/* Neural particle field — deepest layer */}
-          <NeuralCanvas opacity={0.22} count={50} connectionDistance={130} zIndex={0} position="absolute" />
-          {/* Animated mesh gradient */}
+          {/* Neural particle field — deepest layer, toned down */}
+          <NeuralCanvas opacity={0.12} count={30} connectionDistance={120} zIndex={0} position="absolute" color="31,61,43" />
+          {/* Ambient mesh gradient */}
           <div className="mesh-hero" />
-          {/* Scan accent line */}
+          {/* Subtle scan accent */}
           <div className="scan-accent" style={{ top: '30%' }} />
-          {/* Mouse-parallax blobs */}
+          {/* Mouse-parallax blobs — very subtle */}
           <motion.div style={{ x: blobX, y: blobY, position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <div className="blob blob-green" style={{ width: 600, height: 600, top: '-15%', left: '20%', opacity: 0.18 }} />
-            <div className="blob blob-blue" style={{ width: 400, height: 400, top: '40%', right: '5%', opacity: 0.12 }} />
-            <div className="blob blob-purple" style={{ width: 300, height: 300, bottom: '10%', left: '5%', opacity: 0.10 }} />
+            <div className="blob blob-green" style={{ width: 600, height: 600, top: '-15%', left: '20%', opacity: 0.06 }} />
+            <div className="blob blob-blue" style={{ width: 400, height: 400, top: '40%', right: '5%', opacity: 0.04 }} />
+            <div className="blob blob-purple" style={{ width: 300, height: 300, bottom: '10%', left: '5%', opacity: 0.03 }} />
           </motion.div>
-          {/* Grid */}
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: `linear-gradient(rgba(0,210,106,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,210,106,0.025) 1px, transparent 1px)`, backgroundSize: '60px 60px' }} />
+          {/* Faint ledger-line grid */}
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: `linear-gradient(rgba(31,61,43,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(31,61,43,0.03) 1px, transparent 1px)`, backgroundSize: '60px 60px' }} />
 
           <div style={{ position: 'relative', maxWidth: '840px', zIndex: 1 }}>
             {/* Badge */}
@@ -67,37 +67,37 @@ export default function HomePage() {
               initial={{ opacity: 0, y: -20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(0,210,106,0.08)', border: '1px solid rgba(0,210,106,0.25)', borderRadius: '999px', padding: '6px 18px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '28px' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--accent-subtle)', border: '1px solid var(--border-accent)', borderRadius: '999px', padding: '6px 18px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '28px' }}
             >
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block', animation: 'pulse-dot 1.5s infinite' }} />
-              🚀 AI-Powered Local Marketplace — Now Live
+              AI-Powered Local Marketplace — Now Live
             </motion.div>
 
             {/* Headline */}
             <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
-              <motion.h1 custom={0} variants={heroTextVariant} initial="hidden" animate="visible" style={{ lineHeight: 1.1 }}>
+              <motion.h1 custom={0} variants={heroTextVariant} initial="hidden" animate="visible" style={{ lineHeight: 1.1, fontFamily: 'var(--font-display)' }}>
                 Shop smarter with
               </motion.h1>
             </div>
             <div style={{ overflow: 'hidden', marginBottom: '28px' }}>
-              <motion.h1 custom={1} variants={heroTextVariant} initial="hidden" animate="visible" className="gradient-text" style={{ lineHeight: 1.1, fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>
+              <motion.h1 custom={1} variants={heroTextVariant} initial="hidden" animate="visible" className="gradient-text" style={{ lineHeight: 1.1, fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontFamily: 'var(--font-display)' }}>
                 AI that understands you
               </motion.h1>
             </div>
 
             {/* Subtitle */}
             <motion.p custom={2} variants={heroTextVariant} initial="hidden" animate="visible"
-              style={{ fontSize: '1.15rem', color: 'var(--text-secondary)', maxWidth: '560px', margin: '0 auto 44px', lineHeight: 1.7 }}>
+              style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '560px', margin: '0 auto 44px', lineHeight: 1.7 }}>
               Don&apos;t search item by item. Tell us what you want to cook, your health needs, or your occasion — and we fill your cart from nearby shops automatically.
             </motion.p>
 
             {/* CTA */}
             <motion.div custom={3} variants={heroTextVariant} initial="hidden" animate="visible"
               style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}>
-                <Link href="/register" className="btn btn-primary btn-lg btn-glow">Start Shopping →</Link>
+              <motion.div whileHover={{ scale: 1.03, y: -1 }} whileTap={{ scale: 0.97 }}>
+                <Link href="/register" className="btn btn-primary btn-lg">Start Shopping →</Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}>
+              <motion.div whileHover={{ scale: 1.03, y: -1 }} whileTap={{ scale: 0.97 }}>
                 <Link href="/register?role=seller" className="btn btn-secondary btn-lg">Sell on Platform</Link>
               </motion.div>
             </motion.div>
@@ -107,8 +107,8 @@ export default function HomePage() {
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '40px', marginTop: '52px' }}>
               {[['4', 'AI Models'], ['126+', 'Products'], ['3', 'Cities']].map(([val, lab]) => (
                 <div key={lab} style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--accent)' }}>{val}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>{lab}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent)' }}>{val}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.3px' }}>{lab}</div>
                 </div>
               ))}
             </motion.div>
@@ -171,10 +171,10 @@ export default function HomePage() {
           <div className="container" style={{ position: 'relative', zIndex: 1 }}>
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}
               style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <div style={{ display: 'inline-block', background: 'var(--accent-subtle)', border: '1px solid var(--border-accent)', borderRadius: '999px', padding: '4px 14px', fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 700, marginBottom: '16px', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
+              <div style={{ display: 'inline-block', background: 'var(--accent-subtle)', border: '1px solid var(--border-accent)', borderRadius: '999px', padding: '4px 14px', fontSize: '0.72rem', color: 'var(--accent)', fontWeight: 700, marginBottom: '16px', letterSpacing: '1px', textTransform: 'uppercase' as const, fontFamily: 'var(--font-mono)' }}>
                 Platform Features
               </div>
-              <h2>Everything you need, <span className="text-accent">AI-powered</span></h2>
+              <h2 style={{ fontFamily: 'var(--font-display)' }}>Everything you need, <span className="text-accent">AI-powered</span></h2>
               <p style={{ color: 'var(--text-secondary)', marginTop: '14px', maxWidth: '480px', margin: '14px auto 0' }}>
                 From intent-aware search to graph-based suggestions — every feature has intelligence built in.
               </p>
@@ -185,9 +185,9 @@ export default function HomePage() {
               {features.map(f => (
                 <motion.div key={f.title} variants={fadeUp}>
                   <TiltCard className="card feature-card depth-card" style={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%' }}
-                    intensity={6}>
+                    intensity={4} glowColor="rgba(31,61,43,0.05)">
                     <div className="feature-icon">{f.icon}</div>
-                    <h3 style={{ fontSize: '1.05rem' }}>{f.title}</h3>
+                    <h3 style={{ fontSize: '1.05rem', fontFamily: 'var(--font-display)' }}>{f.title}</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.65 }}>{f.desc}</p>
                   </TiltCard>
                 </motion.div>
@@ -201,7 +201,7 @@ export default function HomePage() {
           <div className="container">
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
               style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <h2>The 4-Stage Approach</h2>
+              <h2 style={{ fontFamily: 'var(--font-display)' }}>The 4-Stage Approach</h2>
               <p style={{ color: 'var(--text-secondary)', marginTop: '12px' }}>Built in progressive stages, each one smarter than the last.</p>
             </motion.div>
             <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}
@@ -209,9 +209,9 @@ export default function HomePage() {
               {stages.map(s => (
                 <motion.div key={s.num} variants={fadeUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}
                   className="card" style={{ position: 'relative', overflow: 'hidden' }}>
-                  <div style={{ fontSize: '3.5rem', fontWeight: 900, color: 'rgba(255,255,255,0.04)', lineHeight: 1, position: 'absolute', top: -4, right: 16, userSelect: 'none' as const }}>{s.num}</div>
-                  <span className="badge badge-green" style={{ marginBottom: '12px' }}>Stage {s.num}</span>
-                  <h3 style={{ fontSize: '1rem', marginBottom: '14px' }}>{s.label}</h3>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '3.5rem', fontWeight: 900, color: 'var(--bg-hover)', lineHeight: 1, position: 'absolute', top: -4, right: 16, userSelect: 'none' as const }}>{s.num}</div>
+                  <span className="badge badge-green" style={{ marginBottom: '12px', fontFamily: 'var(--font-mono)' }}>Stage {s.num}</span>
+                  <h3 style={{ fontSize: '1rem', marginBottom: '14px', fontFamily: 'var(--font-display)' }}>{s.label}</h3>
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {s.items.map(item => (
                       <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -227,24 +227,28 @@ export default function HomePage() {
 
         {/* ── CTA ──────────────────────────────────────────────── */}
         <section style={{ padding: '96px 24px', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(135deg, rgba(0,210,106,0.07), rgba(64,196,255,0.04))' }} />
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(135deg, rgba(31,61,43,0.04), rgba(193,80,46,0.03))' }} />
           <motion.div variants={scaleIn} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="container" style={{ textAlign: 'center', position: 'relative' }}>
-            <div style={{ width: 72, height: 72, borderRadius: '22px', background: 'linear-gradient(135deg, var(--accent), var(--info))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', margin: '0 auto 24px', boxShadow: '0 0 40px rgba(0,210,106,0.4)' }}>⚡</div>
-            <h2>Ready to shop smarter?</h2>
+            <div style={{ width: 72, height: 72, borderRadius: '18px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', margin: '0 auto 24px', boxShadow: 'var(--shadow-lg)', color: '#F5F0E8' }}>⚡</div>
+            <h2 style={{ fontFamily: 'var(--font-display)' }}>Ready to shop smarter?</h2>
             <p style={{ color: 'var(--text-secondary)', margin: '16px auto 36px', maxWidth: '420px' }}>
               Join thousands of buyers and local sellers already using Smarter BlinkIt.
             </p>
-            <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}>
+            <motion.div whileHover={{ scale: 1.03, y: -1 }} whileTap={{ scale: 0.97 }}>
               <Link href="/register" className="btn btn-primary btn-lg">Create Free Account →</Link>
             </motion.div>
           </motion.div>
         </section>
 
-        <footer style={{ padding: '32px 24px', borderTop: '1px solid var(--border)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem', position: 'relative' }}>
-          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '200px', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(0,210,106,0.4), transparent)' }} />
+        {/* ── FOOTER ─────────────────────────────────────────────── */}
+        <footer style={{ padding: '40px 24px 32px', borderTop: '1px solid var(--border)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.78rem', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '200px', height: '1px', background: 'linear-gradient(90deg, transparent, var(--accent), transparent)', opacity: 0.2 }} />
           <div className="container">
-            <p>⚡ SmarterBlinkit — AI Grocery Marketplace · Next.js · Express · Gemini AI · Neo4j</p>
+            <p style={{ fontFamily: 'var(--font-mono)', letterSpacing: '0.3px' }}>SmarterBlinkit — AI Grocery Marketplace</p>
+            <p style={{ marginTop: '8px', fontSize: '0.72rem', color: 'var(--text-muted)', opacity: 0.6 }}>
+              Next.js · Express · Gemini AI · Neo4j · MongoDB
+            </p>
           </div>
         </footer>
       </main>

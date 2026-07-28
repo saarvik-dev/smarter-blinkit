@@ -96,9 +96,9 @@ export const floatAnimation: Variants = {
 export const glowPulse: Variants = {
     animate: {
         boxShadow: [
-            '0 0 20px rgba(0, 210, 106, 0.3)',
-            '0 0 40px rgba(0, 210, 106, 0.6)',
-            '0 0 20px rgba(0, 210, 106, 0.3)',
+            '0 2px 8px rgba(31, 61, 43, 0.15)',
+            '0 4px 16px rgba(31, 61, 43, 0.25)',
+            '0 2px 8px rgba(31, 61, 43, 0.15)',
         ],
         transition: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' },
     },
