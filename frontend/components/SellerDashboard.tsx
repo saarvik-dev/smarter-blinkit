@@ -1092,7 +1092,7 @@ export default function SellerDashboard() {
                                         {/* Live camera preview */}
                                         <div style={{ width: '100%', aspectRatio: '4/3', background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)', overflow: 'hidden', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', border: scanning ? '2px solid var(--accent)' : '2px solid var(--border)', transition: 'border-color 0.3s' }}>
                                             <video ref={videoRef} muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: scanning ? 'block' : 'none' }} />
-                                            {!scanning && <span style={{ fontSize: '3.5rem', opacity: 0.4, fontSize: '1rem', fontWeight: 500 }}>Camera</span>}
+                                            {!scanning && <span style={{ opacity: 0.4, fontSize: '1rem', fontWeight: 500 }}>Camera</span>}
                                             {scanning && (
                                                 <>
                                                     {/* Animated sweep line */}

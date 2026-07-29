@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import CartSidebar from '@/components/CartSidebar';
 import { useApp } from '@/lib/context';
 import MultiSelectDropdown from '@/components/MultiSelectDropdown';
-import { fadeUp, staggerContainer, fade } from '@/lib/animations';
+import { fadeUp, staggerContainer } from '@/lib/animations';
 
 interface CartSuggestion {
     ingredient: { item: string; packsToBuy: number; amountText: string; searchQuery: string };
