@@ -29,8 +29,9 @@ export default function HomePage() {
 
         {/* ── HERO ─────────────────────────────────────────────── */}
         <section style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '100px 24px 80px', position: 'relative', overflow: 'hidden' }}>
-          {/* Minimal warm gradient — no blobs, no particles, no grid */}
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(31,61,43,0.04) 0%, transparent 70%)' }} />
+          {/* Background Image & Gradient overlay */}
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/hero-bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.35, mixBlendMode: 'multiply', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(31,61,43,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
           <div className="landing-hero-grid" style={{ position: 'relative', zIndex: 1 }}>
             <div className="landing-hero-left">

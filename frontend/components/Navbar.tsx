@@ -44,8 +44,36 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}>
             <div className="navbar-inner">
-                <Link href="/" className="navbar-logo">
-                    <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 600, letterSpacing: '-0.01em' }}>Smarter<span className="text-accent">Blinkit</span></span>
+                <Link href="/" className="navbar-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', height: '36px' }}>
+                    <img
+                        src="/logo-leaf.jpg"
+                        alt="leaf"
+                        className="navbar-logo-leaf"
+                        style={{
+                            position: 'absolute',
+                            left: '-14px',
+                            top: '-8px',
+                            width: '32px',
+                            height: '32px',
+                            transform: 'rotate(-5deg)',
+                            pointerEvents: 'none',
+                            zIndex: 0,
+                        }}
+                    />
+                    <span
+                        className="navbar-logo-text"
+                        style={{
+                            position: 'relative',
+                            zIndex: 1,
+                            fontFamily: 'var(--font-display)',
+                            fontSize: '1.25rem',
+                            fontWeight: 700,
+                            letterSpacing: '-0.02em',
+                            paddingLeft: '14px',
+                        }}
+                    >
+                        SmarterBlinkit
+                    </span>
                 </Link>
 
                 <div className="navbar-links">

@@ -70,8 +70,36 @@ export default function RegisterPage() {
                 style={{ width: '100%', maxWidth: step === 2 ? '800px' : '440px', transition: 'max-width 0.35s ease' }}>
 
                 <motion.div variants={fadeUp} style={{ textAlign: 'center', marginBottom: '28px' }}>
-                    <Link href="/" style={{ display: 'inline-block', marginBottom: '24px', textDecoration: 'none' }}>
-                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 600, color: 'var(--text-primary)' }}>Smarter<span className="text-accent">Blinkit</span></span>
+                    <Link href="/" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '36px', marginBottom: '24px', textDecoration: 'none' }}>
+                        <img
+                            src="/logo-leaf.jpg"
+                            alt="leaf"
+                            className="navbar-logo-leaf"
+                            style={{
+                                position: 'absolute',
+                                left: '-14px',
+                                top: '-6px',
+                                width: '32px',
+                                height: '32px',
+                                transform: 'rotate(-5deg)',
+                                pointerEvents: 'none',
+                                zIndex: 0,
+                            }}
+                        />
+                        <span
+                            className="navbar-logo-text"
+                            style={{
+                                position: 'relative',
+                                zIndex: 1,
+                                fontFamily: 'var(--font-display)',
+                                fontSize: '1.45rem',
+                                fontWeight: 700,
+                                letterSpacing: '-0.02em',
+                                paddingLeft: '14px',
+                            }}
+                        >
+                            SmarterBlinkit
+                        </span>
                     </Link>
                     <AnimatePresence mode="wait">
                         <motion.div key={step}

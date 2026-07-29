@@ -44,8 +44,36 @@ export default function ForgotPasswordPage() {
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
             <div style={{ width: '100%', maxWidth: '380px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-                    <Link href="/" style={{ display: 'inline-block', marginBottom: '24px', textDecoration: 'none' }}>
-                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 600 }}>Smarter<span className="text-accent">Blinkit</span></span>
+                    <Link href="/" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '36px', marginBottom: '24px', textDecoration: 'none' }}>
+                        <img
+                            src="/logo-leaf.jpg"
+                            alt="leaf"
+                            className="navbar-logo-leaf"
+                            style={{
+                                position: 'absolute',
+                                left: '-14px',
+                                top: '-6px',
+                                width: '32px',
+                                height: '32px',
+                                transform: 'rotate(-5deg)',
+                                pointerEvents: 'none',
+                                zIndex: 0,
+                            }}
+                        />
+                        <span
+                            className="navbar-logo-text"
+                            style={{
+                                position: 'relative',
+                                zIndex: 1,
+                                fontFamily: 'var(--font-display)',
+                                fontSize: '1.45rem',
+                                fontWeight: 700,
+                                letterSpacing: '-0.02em',
+                                paddingLeft: '14px',
+                            }}
+                        >
+                            SmarterBlinkit
+                        </span>
                     </Link>
                     <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 500, marginBottom: '8px' }}>Reset Password</h1>
                     <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>{step === 1 ? 'Enter your email to continue' : 'Set your new password'}</p>

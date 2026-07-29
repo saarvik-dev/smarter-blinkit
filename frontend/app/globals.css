@@ -3556,3 +3556,21 @@ h4 {
     margin-top: 100px;
   }
 }
+
+/* ── Navbar Leaf Logo & Gradient Text ── */
+.navbar-logo-text {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 55%, var(--cta) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.navbar-logo-leaf {
+  mix-blend-mode: multiply;
+}
+
+[data-theme='dark'] .navbar-logo-leaf {
+  filter: invert(1) hue-rotate(180deg);
+  mix-blend-mode: screen;
+}
