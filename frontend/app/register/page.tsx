@@ -33,11 +33,11 @@ export default function RegisterPage() {
     const handleLocationConfirm = async (loc: MapLocationData) => {
         const finalForm = {
             ...form,
-            streetAddress: loc.street || form.streetAddress, // fallback if empty
+            streetAddress: loc.street || form.streetAddress,
             city: loc.city || form.city,
             state: loc.state || form.state,
             pincode: loc.pincode || form.pincode,
-            address: loc.address, // formatted full address
+            address: loc.address,
             location: {
                 type: 'Point',
                 coordinates: loc.coordinates,
@@ -50,11 +50,11 @@ export default function RegisterPage() {
 
         try {
             await register(finalForm);
-            toast('Account created! Now set up your Face ID 🎉', 'success');
+            toast('Account created!', 'success');
             setStep(3);
         } catch (err: any) {
             toast(err?.response?.data?.message || 'Registration failed', 'error');
-            setStep(1); // send back to fix details
+            setStep(1);
         } finally {
             setLoading(false);
         }
@@ -65,47 +65,43 @@ export default function RegisterPage() {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', overflow: 'hidden' }}>
-            {/* Background */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(31,61,43,0.06) 0%, transparent 65%)' }} />
-            <div className="blob blob-green" style={{ width: 500, height: 500, top: '-20%', right: '-10%', opacity: 0.08 }} />
-            <div className="blob blob-blue" style={{ width: 350, height: 350, bottom: '-10%', left: '-8%', opacity: 0.05 }} />
-            <div style={{ position: 'absolute', inset: 0, backgroundImage: `linear-gradient(rgba(31,61,43,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(31,61,43,0.02) 1px, transparent 1px)`, backgroundSize: '50px 50px', pointerEvents: 'none' }} />
-
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
             <motion.div variants={staggerContainer} initial="hidden" animate="visible"
-                style={{ width: '100%', maxWidth: step === 2 ? '800px' : '480px', transition: 'max-width 0.35s ease', position: 'relative', zIndex: 1 }}>
+                style={{ width: '100%', maxWidth: step === 2 ? '800px' : '440px', transition: 'max-width 0.35s ease' }}>
 
-                {/* Logo */}
                 <motion.div variants={fadeUp} style={{ textAlign: 'center', marginBottom: '28px' }}>
-                    <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '20px', textDecoration: 'none' }}>
-                        <div className="navbar-logo-icon" style={{ width: 48, height: 48, fontSize: 22 }}>⚡</div>
-                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>Smarter<span className="text-accent">Blinkit</span></span>
+                    <Link href="/" style={{ display: 'inline-block', marginBottom: '24px', textDecoration: 'none' }}>
+                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 600, color: 'var(--text-primary)' }}>Smarter<span className="text-accent">Blinkit</span></span>
                     </Link>
                     <AnimatePresence mode="wait">
                         <motion.div key={step}
                             initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
                             transition={{ duration: 0.3 }}>
-                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>
-                                {step === 1 ? 'Create Account' : step === 2 ? 'Set Delivery Location' : 'Setup Face ID'}
+                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 500, marginBottom: '8px' }}>
+                                {step === 1 ? 'Create Account' : step === 2 ? 'Set Location' : 'Face ID'}
                             </h1>
-                            <p className="text-muted" style={{ fontSize: '0.9rem' }}>
-                                {step === 1 ? 'Join the smarter marketplace' : step === 2 ? 'Pinpoint exact location for faster delivery' : 'Lightning fast logins'}
+                            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                                {step === 1 ? 'Join the marketplace' : step === 2 ? 'Pin your delivery location' : 'Enable fast login'}
                             </p>
                         </motion.div>
                     </AnimatePresence>
                 </motion.div>
 
-                {/* Step Indicator */}
+                {/* Step Indicator — minimal line dots */}
                 <motion.div variants={fadeUp} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', justifyContent: 'center' }}>
                     {[1, 2, 3].map((s, i) => (
                         <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <motion.div
-                                animate={{ scale: step === s ? 1.1 : 1, background: step > s ? 'var(--accent)' : step === s ? 'var(--accent)' : 'var(--bg-elevated)' }}
-                                transition={{ duration: 0.3 }}
-                                style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: step >= s ? '#F5F0E8' : 'var(--text-muted)', border: step < s ? '1px solid var(--border)' : 'none' }}>
+                            <div style={{
+                                width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '0.68rem', fontWeight: 600, fontFamily: 'var(--font-mono)',
+                                background: step >= s ? 'var(--accent)' : 'transparent',
+                                color: step >= s ? '#F5F0E8' : 'var(--text-muted)',
+                                border: step < s ? '1px solid var(--border)' : 'none',
+                                transition: 'all 0.3s ease'
+                            }}>
                                 {step > s ? '✓' : s}
-                            </motion.div>
-                            {i < 2 && <motion.div animate={{ background: step > s ? 'var(--accent)' : 'var(--border)' }} transition={{ duration: 0.3 }} style={{ width: 52, height: 2, borderRadius: 2 }} />}
+                            </div>
+                            {i < 2 && <div style={{ width: 40, height: 1, background: step > s ? 'var(--accent)' : 'var(--border)', transition: 'background 0.3s ease' }} />}
                         </div>
                     ))}
                 </motion.div>
@@ -115,14 +111,12 @@ export default function RegisterPage() {
                     {step === 1 && (
                         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
                             style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-                            {[{ v: 'buyer', icon: '🛒', label: 'Buyer', sub: 'Shop & explore' }, { v: 'seller', icon: '🏪', label: 'Seller', sub: 'Sell products' }].map(r => (
-                                <motion.button key={r.v} onClick={() => setForm((f: any) => ({ ...f, role: r.v }))} type="button"
-                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                                    style={{ flex: 1, padding: '16px', borderRadius: 'var(--radius-lg)', border: `2px solid ${form.role === r.v ? 'var(--accent)' : 'var(--border)'}`, background: form.role === r.v ? 'var(--accent-subtle)' : 'var(--bg-card)', cursor: 'pointer', transition: 'border-color 0.2s, background 0.2s', textAlign: 'center' }}>
-                                    <div style={{ fontSize: '1.8rem', marginBottom: '6px' }}>{r.icon}</div>
-                                    <div style={{ fontWeight: 700, color: form.role === r.v ? 'var(--accent)' : 'var(--text-primary)' }}>{r.label}</div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{r.sub}</div>
-                                </motion.button>
+                            {[{ v: 'buyer', label: 'Buyer', sub: 'Shop & explore' }, { v: 'seller', label: 'Seller', sub: 'Sell products' }].map(r => (
+                                <button key={r.v} onClick={() => setForm((f: any) => ({ ...f, role: r.v }))} type="button"
+                                    style={{ flex: 1, padding: '14px', borderRadius: 'var(--radius-md)', border: `1.5px solid ${form.role === r.v ? 'var(--accent)' : 'var(--border)'}`, background: form.role === r.v ? 'var(--accent-subtle)' : 'transparent', cursor: 'pointer', transition: 'all 0.2s ease', textAlign: 'center' }}>
+                                    <div style={{ fontWeight: 600, fontSize: '0.88rem', color: form.role === r.v ? 'var(--accent)' : 'var(--text-primary)' }}>{r.label}</div>
+                                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px' }}>{r.sub}</div>
+                                </button>
                             ))}
                         </motion.div>
                     )}
@@ -132,8 +126,7 @@ export default function RegisterPage() {
                     <motion.div key={step}
                         initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
                         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        className="card"
-                        style={{ padding: step === 2 ? '2px' : '32px', overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
+                        style={{ padding: step === 2 ? '2px' : '32px', overflow: 'hidden', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
 
                         {step === 1 && (
                             <form onSubmit={handleStep1Submit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -157,25 +150,23 @@ export default function RegisterPage() {
                                 </div>
                                 {form.role === 'seller' && (
                                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="form-group">
-                                        <label className="form-label">Shop/Business Name</label>
-                                        <input className="form-input" placeholder="My Awesome Store" value={form.shopName} onChange={set('shopName')} required />
+                                        <label className="form-label">Shop Name</label>
+                                        <input className="form-input" placeholder="My Store" value={form.shopName} onChange={set('shopName')} required />
                                     </motion.div>
                                 )}
-                                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ marginTop: '12px' }}>
-                                    <button type="submit" className="btn btn-primary btn-lg w-full">
-                                        Continue to Location 📍
-                                    </button>
-                                </motion.div>
+                                <button type="submit" className="btn btn-primary w-full" style={{ marginTop: '8px' }}>
+                                    Continue to Location
+                                </button>
                             </form>
                         )}
 
                         {step === 2 && (
                             <div style={{ width: '100%', height: '600px', display: 'flex', flexDirection: 'column' }}>
-                                <div style={{ padding: '16px', background: 'var(--bg-elevated)', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border)' }}>
+                                <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border)' }}>
                                     <button className="btn btn-ghost btn-sm" onClick={() => setStep(1)}>← Back</button>
-                                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Move the pin to your exact delivery location</span>
+                                    <span style={{ fontWeight: 500, fontSize: '0.88rem', color: 'var(--text-primary)' }}>Move the pin to your delivery location</span>
                                 </div>
-                                <MapPicker onConfirm={handleLocationConfirm} buttonText={loading ? "Creating Account..." : "Confirm Location & Create Account"} />
+                                <MapPicker onConfirm={handleLocationConfirm} buttonText={loading ? "Creating Account..." : "Confirm & Create Account"} />
                             </div>
                         )}
 
@@ -186,7 +177,7 @@ export default function RegisterPage() {
                 </AnimatePresence>
 
                 {step === 1 && (
-                    <motion.p variants={fadeUp} style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                    <motion.p variants={fadeUp} style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                         Already have an account?{' '}
                         <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 600 }}>Sign in</Link>
                     </motion.p>

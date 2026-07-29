@@ -41,18 +41,17 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', background: 'radial-gradient(ellipse at 50% 0%, rgba(31,61,43,0.05) 0%, transparent 60%)' }}>
-            <div style={{ width: '100%', maxWidth: '420px' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+            <div style={{ width: '100%', maxWidth: '380px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-                    <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                        <div className="navbar-logo-icon" style={{ width: 48, height: 48, fontSize: 22 }}>⚡</div>
-                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700 }}>Smarter<span className="text-accent">Blinkit</span></span>
+                    <Link href="/" style={{ display: 'inline-block', marginBottom: '24px', textDecoration: 'none' }}>
+                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 600 }}>Smarter<span className="text-accent">Blinkit</span></span>
                     </Link>
-                    <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>Reset Password</h1>
-                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{step === 1 ? 'Enter your email to receive reset steps' : 'Now enter your new password'}</p>
+                    <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 500, marginBottom: '8px' }}>Reset Password</h1>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>{step === 1 ? 'Enter your email to continue' : 'Set your new password'}</p>
                 </div>
 
-                <div className="card" style={{ padding: '32px', boxShadow: 'var(--shadow-lg)' }}>
+                <div style={{ padding: '32px', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
                     {step === 1 ? (
                         <form onSubmit={handleRequest} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                             <div className="form-group">
@@ -60,8 +59,8 @@ export default function ForgotPasswordPage() {
                                 <input className="form-input" type="email" placeholder="you@example.com"
                                     value={email} onChange={e => setEmail(e.target.value)} required />
                             </div>
-                            <button type="submit" className="btn btn-primary w-full btn-lg" disabled={loading}>
-                                {loading ? '⏳ Checking...' : 'Continue →'}
+                            <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+                                {loading ? 'Checking…' : 'Continue'}
                             </button>
                         </form>
                     ) : (
@@ -71,14 +70,14 @@ export default function ForgotPasswordPage() {
                                 <input className="form-input" type="password" placeholder="Min 6 characters"
                                     value={newPassword} onChange={e => setNewPassword(e.target.value)} required minLength={6} />
                             </div>
-                            <button type="submit" className="btn btn-primary w-full btn-lg" disabled={loading}>
-                                {loading ? '⏳ Resetting...' : 'Change Password →'}
+                            <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+                                {loading ? 'Resetting…' : 'Change Password'}
                             </button>
                         </form>
                     )}
                 </div>
 
-                <p style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                <p style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                     Remembered?{' '}
                     <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 600 }}>Back to login</Link>
                 </p>

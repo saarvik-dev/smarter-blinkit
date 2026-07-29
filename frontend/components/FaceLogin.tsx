@@ -10,7 +10,7 @@ declare global {
 export default function FaceLogin({ onBack }: { onBack: () => void }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [status, setStatus] = useState<'loading' | 'ready' | 'scanning' | 'done' | 'error'>('loading');
-    const [message, setMessage] = useState('Loading face recognition models...');
+    const [message, setMessage] = useState('Loading face recognition…');
     const { api, setUserFromToken, toast } = useApp();
     const router = useRouter();
     const streamRef = useRef<MediaStream | null>(null);
@@ -35,12 +35,12 @@ export default function FaceLogin({ onBack }: { onBack: () => void }) {
                     window.faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
                     window.faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
                 ]);
-                setMessage('Camera starting...');
+                setMessage('Camera starting…');
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 320, height: 240 } });
                 streamRef.current = stream;
                 if (videoRef.current) { videoRef.current.srcObject = stream; }
                 setStatus('ready');
-                setMessage('Look at the camera and click Scan');
+                setMessage('Position your face and click Scan');
             } catch (err: any) {
                 setStatus('error'); setMessage(err.message || 'Camera error');
             }
@@ -51,7 +51,7 @@ export default function FaceLogin({ onBack }: { onBack: () => void }) {
 
     const handleScan = async () => {
         if (!videoRef.current || !window.faceapi) return;
-        setStatus('scanning'); setMessage('Scanning your face...');
+        setStatus('scanning'); setMessage('Scanning…');
         try {
             const detection = await window.faceapi
                 .detectSingleFace(videoRef.current, new window.faceapi.TinyFaceDetectorOptions())
@@ -63,15 +63,12 @@ export default function FaceLogin({ onBack }: { onBack: () => void }) {
             const descriptor = Array.from(detection.descriptor as Float32Array);
             const { data } = await api.post('/auth/face-login', { descriptor });
 
-            // ✅ FIX: Update React context state with token+user (not just localStorage)
-            // This ensures every component sees the logged-in user immediately
             setUserFromToken(data.token, data.user);
 
-            setStatus('done'); setMessage(`Welcome back, ${data.user.name}! 👋`);
-            toast('Face login successful!', 'success');
+            setStatus('done'); setMessage(`Welcome back, ${data.user.name}`);
+            toast('Face login successful', 'success');
             streamRef.current?.getTracks().forEach(t => t.stop());
 
-            // ✅ FIX: Route based on actual role from API response (not from stale context)
             setTimeout(() => {
                 if (data.user.role === 'seller') {
                     router.replace('/dashboard');
@@ -86,28 +83,28 @@ export default function FaceLogin({ onBack }: { onBack: () => void }) {
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <h3 style={{ marginBottom: '8px', fontWeight: 700, fontFamily: 'var(--font-display)' }}>🪪 Face ID Login</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '20px' }}>{message}</p>
+            <h3 style={{ marginBottom: '6px', fontWeight: 600, fontFamily: 'var(--font-display)', fontSize: '1.05rem' }}>Face ID Login</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '20px' }}>{message}</p>
 
-            <div style={{ position: 'relative', width: 280, height: 210, margin: '0 auto 20px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: `2px solid ${status === 'done' ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-elevated)' }}>
+            <div style={{ position: 'relative', width: 260, height: 195, margin: '0 auto 20px', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: `1.5px solid ${status === 'done' ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-elevated)' }}>
                 <video ref={videoRef} autoPlay muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: status === 'loading' ? 'none' : 'block' }} />
                 {status === 'loading' && (
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div className="spinner" style={{ width: 32, height: 32 }} />
+                        <div className="spinner" style={{ width: 28, height: 28 }} />
                     </div>
                 )}
                 {status === 'done' && (
-                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(31,61,43,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>✅</div>
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(31,61,43,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', color: 'var(--accent)', fontWeight: 600 }}>✓</div>
                 )}
             </div>
 
             <div style={{ display: 'flex', gap: '10px' }}>
-                <button className="btn btn-secondary btn-sm" onClick={onBack} style={{ flex: 1 }}>← Back</button>
+                <button className="btn btn-secondary btn-sm" onClick={onBack} style={{ flex: 1 }}>Back</button>
                 {status === 'ready' && (
-                    <button className="btn btn-primary" onClick={handleScan} style={{ flex: 2 }}>🔍 Scan Face</button>
+                    <button className="btn btn-primary" onClick={handleScan} style={{ flex: 2 }}>Scan Face</button>
                 )}
                 {status === 'scanning' && (
-                    <button className="btn btn-secondary" disabled style={{ flex: 2 }}><span className="spinner" style={{ width: 16, height: 16 }} /> Scanning...</button>
+                    <button className="btn btn-secondary" disabled style={{ flex: 2 }}><span className="spinner" style={{ width: 14, height: 14 }} /> Scanning…</button>
                 )}
             </div>
         </div>
