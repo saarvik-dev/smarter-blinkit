@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
+import InfiniteVerticalScroller from '@/components/InfiniteVerticalScroller';
 import { staggerContainer, fadeUp, heroTextVariant, scaleIn } from '@/lib/animations';
 
 const features = [
@@ -27,62 +28,69 @@ export default function HomePage() {
       <main style={{ paddingTop: '64px' }}>
 
         {/* ── HERO ─────────────────────────────────────────────── */}
-        <section style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px', position: 'relative', overflow: 'hidden' }}>
+        <section style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '100px 24px 80px', position: 'relative', overflow: 'hidden' }}>
           {/* Minimal warm gradient — no blobs, no particles, no grid */}
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(31,61,43,0.04) 0%, transparent 70%)' }} />
 
-          <div style={{ position: 'relative', maxWidth: '720px', zIndex: 1 }}>
-            {/* Eyebrow — simple text, not a pill */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '28px' }}
-            >
-              Local grocery, intelligently delivered
-            </motion.p>
+          <div className="landing-hero-grid" style={{ position: 'relative', zIndex: 1 }}>
+            <div className="landing-hero-left">
+              {/* Eyebrow — simple text, not a pill */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="hero-eyebrow"
+              >
+                Local grocery, intelligently delivered
+              </motion.p>
 
-            {/* Headline — typography is the hero */}
-            <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
-              <motion.h1 custom={0} variants={heroTextVariant} initial="hidden" animate="visible"
-                style={{ lineHeight: 1.08, fontFamily: 'var(--font-display)', fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', fontWeight: 400, letterSpacing: '-0.02em' }}>
-                Shop smarter with
-              </motion.h1>
-            </div>
-            <div style={{ overflow: 'hidden', marginBottom: '36px' }}>
-              <motion.h1 custom={1} variants={heroTextVariant} initial="hidden" animate="visible"
-                style={{ lineHeight: 1.08, fontFamily: 'var(--font-display)', fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--accent)' }}>
-                AI that understands you
-              </motion.h1>
-            </div>
+              {/* Headline — typography is the hero */}
+              <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
+                <motion.h1 custom={0} variants={heroTextVariant} initial="hidden" animate="visible"
+                  style={{ lineHeight: 1.08, fontFamily: 'var(--font-display)', fontSize: 'clamp(1.9rem, 3.4vw, 2.7rem)', fontWeight: 400, letterSpacing: '-0.02em' }}>
+                  Shop smarter with
+                </motion.h1>
+              </div>
+              <div style={{ overflow: 'hidden', marginBottom: '36px' }}>
+                <motion.h1 custom={1} variants={heroTextVariant} initial="hidden" animate="visible"
+                  style={{ lineHeight: 1.08, fontFamily: 'var(--font-display)', fontSize: 'clamp(1.9rem, 3.4vw, 2.7rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--accent)' }}>
+                  AI that understands you
+                </motion.h1>
+              </div>
 
-            {/* Subtitle */}
-            <motion.p custom={2} variants={heroTextVariant} initial="hidden" animate="visible"
-              style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '480px', margin: '0 auto 48px', lineHeight: 1.75 }}>
-              Tell us what you want to cook, your health needs, or your occasion — we fill your cart from nearby shops automatically.
-            </motion.p>
+              {/* Subtitle */}
+              <motion.p custom={2} variants={heroTextVariant} initial="hidden" animate="visible"
+                className="hero-subtitle"
+              >
+                Tell us what you want to cook, your health needs, or your occasion — we fill your cart from nearby shops automatically.
+              </motion.p>
 
-            {/* CTA — clean, two buttons */}
-            <motion.div custom={3} variants={heroTextVariant} initial="hidden" animate="visible"
-              style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
-                <Link href="/register" className="btn btn-primary btn-lg">Start Shopping</Link>
+              {/* CTA — clean, two buttons */}
+              <motion.div custom={3} variants={heroTextVariant} initial="hidden" animate="visible"
+                className="hero-cta"
+              >
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                  <Link href="/register" className="btn btn-primary btn-lg">Start Shopping</Link>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                  <Link href="/register?role=seller" className="btn btn-secondary btn-lg">Sell on Platform</Link>
+                </motion.div>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
-                <Link href="/register?role=seller" className="btn btn-secondary btn-lg">Sell on Platform</Link>
-              </motion.div>
-            </motion.div>
 
-            {/* Minimal stats — monospace, no boxes */}
-            <motion.div custom={4} variants={heroTextVariant} initial="hidden" animate="visible"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '48px', marginTop: '64px' }}>
-              {[['4', 'models'], ['126+', 'products'], ['3', 'cities']].map(([val, lab]) => (
-                <div key={lab}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 600, color: 'var(--text-primary)' }}>{val}</div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.5px', marginTop: '4px' }}>{lab}</div>
-                </div>
-              ))}
-            </motion.div>
+              {/* Minimal stats — monospace, no boxes */}
+              <motion.div custom={4} variants={heroTextVariant} initial="hidden" animate="visible"
+                className="hero-stats"
+              >
+                {[['4', 'models'], ['126+', 'products'], ['3', 'cities']].map(([val, lab]) => (
+                  <div key={lab}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 600, color: 'var(--text-primary)' }}>{val}</div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.5px', marginTop: '4px' }}>{lab}</div>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            <InfiniteVerticalScroller />
           </div>
         </section>
 
