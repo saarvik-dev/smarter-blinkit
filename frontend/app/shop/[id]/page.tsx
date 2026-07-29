@@ -125,6 +125,7 @@ export default function ProductDetailPage() {
     const displayedProductRating = ratingSummary?.finalProductRating ?? product?.rating ?? 0;
     const displayedReviewCount = ratingSummary?.userReviewCount ?? 0;
 
+    // Legacy emoji lookup, kept for backward compatibility if needed for fallback images
     const emoji: Record<string, string> = { Groceries: '🌾', Dairy: '🥛', Fresh: '🥬', Pharmacy: '💊', Beverages: '🥤', Snacks: '🍿' };
 
     if (loading) return (
@@ -151,37 +152,37 @@ export default function ProductDetailPage() {
                         <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-xl)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '6rem', height: 320, overflow: 'hidden' }}>
                             {product.image
                                 ? <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                : <span>{emoji[product.category] || '📦'}</span>}
+                                : <span style={{ fontFamily: 'var(--font-display)', color: 'var(--text-muted)' }}>{product.name?.charAt(0).toUpperCase() || 'P'}</span>}
                         </div>
 
                         <div>
-                            <span className="badge badge-blue" style={{ marginBottom: 10, display: 'inline-block' }}>{product.category}</span>
-                            <h1 style={{ fontSize: '2rem', marginBottom: 10 }}>{product.name}</h1>
+                            <span style={{ marginBottom: 10, display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>{product.category}</span>
+                            <h1 style={{ fontSize: '2rem', marginBottom: 10, fontFamily: 'var(--font-display)', fontWeight: 500 }}>{product.name}</h1>
                             <p style={{ color: 'var(--text-secondary)', marginBottom: 20, fontSize: '0.95rem', lineHeight: 1.6 }}>{product.description}</p>
 
                             {/* Price */}
                             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 20 }}>
-                                <span style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent)' }}>₹{product.price}</span>
+                                <span style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{product.price}</span>
                                 <span style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>per {product.unit}</span>
                             </div>
 
                             {/* Shop */}
                             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 20, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                                <span>🏪</span> <strong>{product.shopId?.name}</strong>
+                                <span>Sold by</span> <strong>{product.shopId?.name}</strong>
                                 <span>·</span>
                                 <span>
                                     {shopRating
                                         ? (shopRating.userReviewCount > 0
-                                            ? `⭐ ${Number(shopRating.shopRating).toFixed(1)}`
-                                            : '⭐ No ratings yet')
-                                        : `⭐ ${Number(product.shopId?.rating ?? 0).toFixed(1)}`}
+                                            ? `★ ${Number(shopRating.shopRating).toFixed(1)}`
+                                            : '★ No ratings yet')
+                                        : `★ ${Number(product.shopId?.rating ?? 0).toFixed(1)}`}
                                 </span>
-                                {product.stock < 10 && product.stock > 0 && <span className="badge badge-yellow" style={{ fontSize: '0.7rem' }}>Only {product.stock} left!</span>}
-                                {product.stock === 0 && <span className="badge badge-red">Out of Stock</span>}
+                                {product.stock < 10 && product.stock > 0 && <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: '#d97706' }}>Only {product.stock} left</span>}
+                                {product.stock === 0 && <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: '#dc2626' }}>Out of Stock</span>}
                             </div>
 
                             <div className="review-summary-banner" style={{ marginBottom: 20 }}>
-                                <div className="review-summary-score">⭐ {Number(displayedProductRating).toFixed(1)} / 5</div>
+                                <div className="review-summary-score">★ {Number(displayedProductRating).toFixed(1)} / 5</div>
                                 <div className="review-summary-count">
                                     {displayedReviewCount === 0
                                         ? '(No reviews yet)'
@@ -206,7 +207,7 @@ export default function ProductDetailPage() {
                                     <button className="qty-btn" onClick={() => setQty(q => Math.min(product.stock, q + 1))}>+</button>
                                 </div>
                                 <button disabled={product.stock === 0} onClick={handleAddToCart} className="btn btn-primary btn-lg">
-                                    {product.stock === 0 ? 'Out of Stock' : `🛒 Add ₹${(product.price * qty).toFixed(2)} to Cart`}
+                                    {product.stock === 0 ? 'Out of Stock' : `Add to Cart · ₹${(product.price * qty).toFixed(2)}`}
                                 </button>
                             </div>
                         </div>
@@ -217,22 +218,21 @@ export default function ProductDetailPage() {
                         <div>
                             <div style={{ marginBottom: 20 }}>
                                 <h2 style={{ fontSize: '1.3rem', marginBottom: 4 }}>
-                                    🔗 Smart Suggestions
-                                    <span className="badge badge-green" style={{ marginLeft: 10, fontSize: '0.7rem' }}>Powered by Neo4j</span>
+                                    Related Picks
                                 </h2>
                                 <p className="text-muted" style={{ fontSize: '0.85rem' }}>
-                                    {boughtWith.length > 0 && `🛒 ${boughtWith.length} frequently bought together`}
+                                    {boughtWith.length > 0 && `${boughtWith.length} frequently bought together`}
                                     {boughtWith.length > 0 && similar.length > 0 && ' · '}
-                                    {similar.length > 0 && `🔍 ${similar.length} similar items`}
+                                    {similar.length > 0 && `${similar.length} similar items`}
                                 </p>
                             </div>
                             <div className="product-grid">
                                 {suggestProducts.map(p => (
                                     <div key={p?._id} className="product-card" onClick={() => router.push(`/shop/${p?._id}`)}>
-                                        <div className="product-card-image">{p?.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : emoji[p?.category] || '📦'}</div>
+                                        <div className="product-card-image">{p?.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', background: 'var(--bg-elevated)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: '2rem', color: 'var(--text-muted)' }}>{p?.name?.charAt(0).toUpperCase() || 'P'}</div>}</div>
                                         <div className="product-card-body">
                                             <div className="product-card-name">{p?.name}</div>
-                                            <div className="product-card-shop">🏪 {p?.shopId?.name}</div>
+                                            <div className="product-card-shop">from {p?.shopId?.name}</div>
                                             <div className="product-card-footer">
                                                 <div>
                                                     <div className="product-card-price">₹{p?.price}</div>
@@ -249,7 +249,7 @@ export default function ProductDetailPage() {
 
                     <section className="review-section" style={{ marginTop: 36 }}>
                         <div className="review-header-row">
-                            <h2 style={{ fontSize: '1.3rem', marginBottom: 4 }}>Product Reviews</h2>
+                            <h2 style={{ fontSize: '1.3rem', marginBottom: 4, fontFamily: 'var(--font-display)' }}>Product Reviews</h2>
                             <div className="review-sort-wrap">
                                 <label htmlFor="review-sort" className="text-muted" style={{ fontSize: '0.8rem' }}>Sort</label>
                                 <select

@@ -5,8 +5,7 @@ import Navbar from '@/components/Navbar';
 import CartSidebar from '@/components/CartSidebar';
 import { useApp } from '@/lib/context';
 import MultiSelectDropdown from '@/components/MultiSelectDropdown';
-import { fadeUp, staggerContainer, scaleIn } from '@/lib/animations';
-import NeuralCanvas from '@/components/NeuralCanvas';
+import { fadeUp, staggerContainer, fade } from '@/lib/animations';
 
 interface CartSuggestion {
     ingredient: { item: string; packsToBuy: number; amountText: string; searchQuery: string };
@@ -86,39 +85,22 @@ export default function AIAgentPage() {
         <>
             <Navbar />
             <CartSidebar />
-            <main style={{ paddingTop: '64px', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
-                {/* Neural network canvas background */}
-                <NeuralCanvas opacity={0.28} count={60} connectionDistance={130} zIndex={0} />
-                {/* Ambient blobs behind canvas */}
-                <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-                    <div className="blob blob-green" style={{ width: 500, height: 500, top: '-10%', right: '-5%', opacity: 0.15 }} />
-                    <div className="blob blob-blue" style={{ width: 400, height: 400, bottom: '10%', left: '-5%', opacity: 0.10 }} />
-                    <div className="mesh-hero" />
-                </div>
+            <main style={{ paddingTop: '64px', minHeight: '100vh', position: 'relative' }}>
                 <div className="container" style={{ padding: '40px 24px', maxWidth: '820px', position: 'relative', zIndex: 1 }}>
                     {/* Header */}
                     <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ marginBottom: '32px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                            <div className="ai-glow-ring" style={{ width: 52, height: 52, background: 'linear-gradient(135deg, var(--accent), var(--info))', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0, boxShadow: '0 0 32px rgba(0,210,106,0.35)' }}>🧠</div>
-                            <div>
-                                <h1 style={{ fontSize: '1.75rem', marginBottom: '4px' }}>AI Recipe Agent</h1>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                                    <div className="ai-badge" style={{ display: 'inline-block' }}>Powered by Gemini</div>
-                                    <div className="ai-status-bar"><span className="ai-status-dot" />Model online</div>
-                                </div>
-                            </div>
-                        </div>
-                        <p className="text-muted">Tell me what you want to cook or need — I&apos;ll find the ingredients from nearby shops and fill your cart automatically.</p>
+                        <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: '1.4rem', marginBottom: '8px' }}>Meal Planner</h1>
+                        <p className="text-muted" style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem' }}>Tell me what you want to cook or need — I&apos;ll find the ingredients from nearby shops and fill your cart automatically.</p>
                     </motion.div>
 
                     {/* Input */}
                     <motion.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.1 }}
-                        className="glass-panel" style={{ marginBottom: '28px', padding: '24px' }}>
+                        style={{ marginBottom: '28px', padding: '24px', background: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)' }}>
                         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                             <div>
-                                <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>What do you want to make?</label>
+                                <label className="form-label" style={{ marginBottom: '8px', display: 'block', fontWeight: 500 }}>Recipe or request</label>
                                 <textarea
-                                    className="form-input glass-input"
+                                    className="form-input"
                                     rows={3}
                                     placeholder='e.g. "Make pizza margherita for 4 people" or "Healthy breakfast meal prep for the week"'
                                     value={prompt}
@@ -128,11 +110,11 @@ export default function AIAgentPage() {
                             </div>
 
                             {/* Filters */}
-                            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', background: 'var(--bg-card)', padding: '12px 16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginTop: '4px' }}>
-                                <span style={{ fontSize: '0.9rem', fontWeight: 600, marginRight: '8px' }}>Filters:</span>
+                            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', background: 'var(--bg-elevated)', padding: '12px 16px', borderRadius: 'var(--radius-md)', marginTop: '4px' }}>
+                                <span style={{ fontSize: '0.85rem', fontWeight: 500, marginRight: '8px', fontFamily: 'var(--font-mono)' }}>FILTERS</span>
 
                                 <MultiSelectDropdown
-                                    options={availableShops.map(shop => ({ value: shop._id, label: shop.name, emoji: '🏪' }))}
+                                    options={availableShops.map(shop => ({ value: shop._id, label: shop.name }))}
                                     selected={selectedShops}
                                     onChange={setSelectedShops}
                                     placeholder="All Shops"
@@ -140,8 +122,8 @@ export default function AIAgentPage() {
                                 />
 
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-                                    <input type="checkbox" id="nearbyOnly" checked={nearbyOnly} onChange={e => setNearbyOnly(e.target.checked)} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-                                    <label htmlFor="nearbyOnly" style={{ fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>Nearby Only (50km)</label>
+                                    <input type="checkbox" id="nearbyOnly" checked={nearbyOnly} onChange={e => setNearbyOnly(e.target.checked)} style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: 'var(--text)' }} />
+                                    <label htmlFor="nearbyOnly" style={{ fontSize: '0.85rem', fontFamily: 'var(--font-mono)', cursor: 'pointer' }}>Nearby Only (50km)</label>
                                 </div>
 
                                 {selectedShops.length > 0 && (
@@ -150,8 +132,8 @@ export default function AIAgentPage() {
                             </div>
 
                             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '4px' }}>
-                                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                    <button type="submit" className="btn btn-primary btn-glow" disabled={loading || !prompt.trim()}>
+                                <motion.div whileTap={{ scale: 0.97 }}>
+                                    <button type="submit" className="btn btn-primary" disabled={loading || !prompt.trim()}>
                                         {loading ? (
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                                 <span className="ai-thinking-dot" style={{ background: '#fff' }} />
@@ -159,7 +141,7 @@ export default function AIAgentPage() {
                                                 <span className="ai-thinking-dot" style={{ background: '#fff', animationDelay: '0.4s' }} />
                                                 Thinking...
                                             </span>
-                                        ) : '🧠 Find Ingredients'}
+                                        ) : 'Find Ingredients'}
                                     </button>
                                 </motion.div>
                                 <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setPrompt(''); setResults(null); }}>Clear</button>
@@ -168,7 +150,7 @@ export default function AIAgentPage() {
 
                         {/* Example Prompts */}
                         <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ marginTop: '16px' }}>
-                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '8px' }}>💡 Try these:</p>
+                            <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Suggestions</p>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                                 {examples.map((ex, i) => (
                                     <motion.button key={ex}
@@ -194,7 +176,7 @@ export default function AIAgentPage() {
                                         <div key={i} className="ai-thinking-dot" style={{ width: 16, height: 16, animationDelay: `${i * 0.18}s` }} />
                                     ))}
                                 </div>
-                                <p style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '12px' }}>🧠 Gemini is analyzing your request...</p>
+                                <p style={{ fontSize: '1rem', fontWeight: 500, fontFamily: 'var(--font-display)', marginBottom: '12px' }}>Analyzing your request...</p>
                                 <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '20px' }}>Identifying ingredients · Matching nearby shops · Optimising cart</p>
                                 <div style={{ maxWidth: 320, margin: '0 auto', overflow: 'hidden', background: 'var(--bg-elevated)', borderRadius: 999, height: 3 }}>
                                     <div className="inference-progress" style={{ height: '100%', borderRadius: 999 }} />
@@ -208,26 +190,26 @@ export default function AIAgentPage() {
                         {results && !loading && (
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                                 {results.fallback && (
-                                    <div style={{ background: 'rgba(255, 170, 0, 0.08)', border: '1px solid rgba(255, 170, 0, 0.25)', borderRadius: 'var(--radius-md)', padding: '10px 14px', marginBottom: 16, fontSize: '0.82rem', color: '#ffaa00', display: 'flex', gap: 8, alignItems: 'center' }}>
-                                        ⚡ AI is currently busy — showing keyword-based matches instead. Results may be broader.
+                                    <div style={{ background: 'color-mix(in srgb, var(--ai) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--ai) 25%, transparent)', borderRadius: 'var(--radius-md)', padding: '10px 14px', marginBottom: 16, fontSize: '0.82rem', color: 'var(--ai)', display: 'flex', gap: 8, alignItems: 'center' }}>
+                                        AI is currently busy — showing keyword-based matches instead. Results may be broader.
                                     </div>
                                 )}
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                                     <div>
-                                        <h2 style={{ fontSize: '1.2rem', marginBottom: '2px' }}>
+                                        <h2 style={{ fontSize: '1.2rem', marginBottom: '2px', fontFamily: 'var(--font-display)', fontWeight: 500 }}>
                                             Found {results.cartItems.length} ingredient{results.cartItems.length !== 1 ? 's' : ''}
-                                            {results.notFound.length > 0 && <span className="badge badge-red" style={{ marginLeft: 10, fontSize: '0.75rem' }}>{results.notFound.length} not found</span>}
+                                            {results.notFound.length > 0 && <span className="badge" style={{ marginLeft: 10, fontSize: '0.75rem', background: 'var(--bg-elevated)' }}>{results.notFound.length} missing</span>}
                                         </h2>
                                         {results.modelUsed && (
-                                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', opacity: 0.65, marginTop: '2px' }}>
+                                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', opacity: 0.8, marginTop: '4px' }}>
                                                 Generated using {results.modelUsed}
                                             </div>
                                         )}
                                     </div>
                                     {results.cartItems.length > 0 && (
-                                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                                        <motion.div whileTap={{ scale: 0.97 }}>
                                             <button className="btn btn-primary" onClick={addSelectedToCart}>
-                                                🛒 Add {selected.size} to Cart
+                                                Add {selected.size} to Cart
                                             </button>
                                         </motion.div>
                                     )}
@@ -237,23 +219,22 @@ export default function AIAgentPage() {
                                 <motion.div variants={staggerContainer} initial="hidden" animate="visible"
                                     style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
                                     {results.cartItems.map((item, index) => (
-                                        <motion.div key={index} variants={scaleIn}
-                                            whileHover={{ scale: 1.01, transition: { duration: 0.15 } }}
-                                            className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', cursor: 'pointer', borderColor: selected.has(index) ? 'var(--accent)' : 'var(--border)', background: selected.has(index) ? 'var(--accent-subtle)' : 'var(--bg-card)' }} onClick={() => toggleItem(index)}>
-                                            <input type="checkbox" readOnly checked={selected.has(index)} style={{ width: 18, height: 18, accentColor: 'var(--accent)' }} />
-                                            <div style={{ fontSize: '2rem', width: 50, height: 50, background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                                                {item.bestMatch.image ? <img src={item.bestMatch.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '📦'}
+                                        <motion.div key={index} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}
+                                            className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', cursor: 'pointer', borderColor: selected.has(index) ? 'var(--text)' : 'var(--border)', background: selected.has(index) ? 'var(--bg-elevated)' : 'var(--bg-card)' }} onClick={() => toggleItem(index)}>
+                                            <input type="checkbox" readOnly checked={selected.has(index)} style={{ width: 18, height: 18, accentColor: 'var(--text)' }} />
+                                            <div style={{ fontSize: '1.2rem', width: 50, height: 50, background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', color: 'var(--text-muted)' }}>
+                                                {item.bestMatch.image ? <img src={item.bestMatch.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : item.bestMatch.name.charAt(0).toUpperCase()}
                                             </div>
                                             <div style={{ flex: 1 }}>
-                                                <div style={{ fontWeight: 700 }}>{item.bestMatch.name}</div>
+                                                <div style={{ fontWeight: 500 }}>{item.bestMatch.name}</div>
                                                 <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                                                     For: {item.ingredient.item} · {item.ingredient.amountText} ·
-                                                    🏪 {item.bestMatch.shopId?.name || 'Local Shop'}
+                                                    from {item.bestMatch.shopId?.name || 'Local Shop'}
                                                 </div>
                                             </div>
                                             <div style={{ textAlign: 'right' }}>
-                                                <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: '1.1rem' }}>₹{(item.bestMatch.price * item.ingredient.packsToBuy).toFixed(2)}</div>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>₹{item.bestMatch.price}/{item.bestMatch.unit}</div>
+                                                <div style={{ fontWeight: 500, fontFamily: 'var(--font-mono)', fontSize: '1.05rem' }}>₹{(item.bestMatch.price * item.ingredient.packsToBuy).toFixed(2)}</div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>₹{item.bestMatch.price}/{item.bestMatch.unit}</div>
                                             </div>
                                         </motion.div>
                                     ))}
@@ -261,11 +242,11 @@ export default function AIAgentPage() {
 
                                 {/* Not Found */}
                                 {results.notFound.length > 0 && (
-                                    <div className="card" style={{ background: 'rgba(255,82,82,0.05)', borderColor: 'rgba(255,82,82,0.2)' }}>
-                                        <h3 style={{ fontSize: '1rem', marginBottom: '12px', color: 'var(--danger)' }}>⚠️ Items not found in nearby shops</h3>
+                                    <div className="card" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
+                                        <h3 style={{ fontSize: '1rem', marginBottom: '12px', fontWeight: 500 }}>Not available nearby</h3>
                                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                             {results.notFound.map((item: any) => (
-                                                <span key={item.item} className="badge badge-red">{item.item} ({item.amountText})</span>
+                                                <span key={item.item} className="badge" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>{item.item} ({item.amountText})</span>
                                             ))}
                                         </div>
                                     </div>

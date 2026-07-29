@@ -267,48 +267,47 @@ export default function BuyerDashboard() {
             {/* Sidebar */}
             <aside className="sidebar">
                 <div style={{ padding: '0 12px 20px' }}>
-                    <div style={{ width: 52, height: 52, background: 'linear-gradient(135deg, var(--accent), var(--info))', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', marginBottom: '12px' }}>
+                    <div style={{ width: 52, height: 52, background: 'var(--accent)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', marginBottom: '12px' }}>
                         {user?.name[0].toUpperCase()}
                     </div>
                     <div style={{ fontWeight: 700 }}>{user?.name}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{user?.email}</div>
-                    <div className="badge badge-green" style={{ marginTop: '8px' }}>Buyer</div>
+                    <div className="badge" style={{ marginTop: '8px' }}>Buyer</div>
                     <div className="sidebar-status-bar">
-                        <span className="status-online-dot" />
                         Online · Ready to shop
                     </div>
                 </div>
                 <div className="sidebar-section-label">Navigate</div>
-                <a href="/shop" className="sidebar-link"><span className="link-icon">🛒</span> Shop</a>
-                <a href="/ai-agent" className="sidebar-link"><span className="link-icon">🧠</span> AI Agent</a>
+                <a href="/shop" className="sidebar-link"><span className="link-icon">S</span> Shop</a>
+                <a href="/ai-agent" className="sidebar-link"><span className="link-icon">P</span> Planner</a>
                 <button onClick={() => setActiveTab('orders')} className={`sidebar-link${activeTab === 'orders' ? ' active' : ''}`} style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: '10px 12px', color: 'inherit', font: 'inherit' }}>
-                    <span className="link-icon">📋</span> My Orders
+                    <span className="link-icon">O</span> My Orders
                 </button>
                 <button onClick={() => setActiveTab('faceid')} className={`sidebar-link${activeTab === 'faceid' ? ' active' : ''}`} style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: '10px 12px', color: 'inherit', font: 'inherit' }}>
-                    <span className="link-icon">🪪</span> Face ID
+                    <span className="link-icon">F</span> Face ID
                 </button>
                 <button onClick={() => setActiveTab('account')} className={`sidebar-link${activeTab === 'account' ? ' active' : ''}`} style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: '10px 12px', color: 'var(--text-primary)', font: 'inherit' }}>
-                    <span className="link-icon">⚙️</span> Account
+                    <span className="link-icon">S</span> Account
                 </button>
 
                 <div className="sidebar-section-label" style={{ marginTop: '20px' }}>Quick Actions</div>
                 <div className="quick-action-row">
-                    <a href="/shop" className="quick-action-btn primary"><span>🛍️</span> Browse Stores</a>
-                    <a href="/ai-agent" className="quick-action-btn primary"><span>🧠</span> Ask AI Agent</a>
-                    <button onClick={() => setActiveTab('account')} className="quick-action-btn" style={{ background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', fontFamily: 'inherit' }}><span>⚙️</span> Account Settings</button>
+                    <a href="/shop" className="quick-action-btn primary">Browse Stores</a>
+                    <a href="/ai-agent" className="quick-action-btn primary">Ask AI Agent</a>
+                    <button onClick={() => setActiveTab('account')} className="quick-action-btn" style={{ background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', fontFamily: 'inherit' }}>Account Settings</button>
                 </div>
             </aside>
 
             {/* Main Content */}
             <main className="dashboard-main">
                 <div style={{ marginBottom: '32px' }}>
-                    <h1 style={{ fontSize: '1.75rem', marginBottom: '6px' }}>Welcome back, {user?.name.split(' ')[0]} 👋</h1>
+                    <h1 style={{ fontSize: '1.75rem', marginBottom: '6px', fontFamily: 'var(--font-display)' }}>Welcome back, {user?.name.split(' ')[0]}</h1>
                     <p className="text-muted">{activeTab === 'faceid' ? 'Manage your Face ID' : activeTab === 'account' ? 'Manage your profile and settings' : "Here's your shopping overview"}</p>
                 </div>
 
                 {activeTab === 'faceid' ? (
                     <div className="card" style={{ maxWidth: '500px', padding: '32px' }}>
-                        <h3 style={{ marginBottom: '8px' }}>🪪 Face ID Enrollment</h3>
+                        <h3 style={{ marginBottom: '8px', fontFamily: 'var(--font-display)' }}>Face ID</h3>
                         <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '20px' }}>
                             Set up or update your Face ID to enable instant camera-based login. Your face data is stored as an encrypted mathematical hash and never leaves the system.
                         </p>
@@ -319,7 +318,7 @@ export default function BuyerDashboard() {
                         {/* Address Book */}
                         <div className="card" style={{ padding: '32px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                                <h3 style={{ margin: 0 }}>📍 Address Book</h3>
+                                <h3 style={{ margin: 0, fontFamily: 'var(--font-display)' }}>Address Book</h3>
                                 {!addingAddress && (
                                     <button className="btn btn-primary btn-sm" onClick={() => {
                                         setAddingAddress(true);
@@ -354,7 +353,7 @@ export default function BuyerDashboard() {
                                                 </div>
                                                 <div style={{ display: 'flex', gap: '8px' }}>
                                                     {!isActive && <button className="btn btn-secondary btn-sm" onClick={() => handleSetActiveAddress(addr._id)}>Set Active</button>}
-                                                    <button className="btn btn-ghost btn-sm" style={{ color: 'var(--danger)' }} onClick={() => handleDeleteAddress(addr._id)}>🗑</button>
+                                                    <button className="btn btn-ghost btn-sm" style={{ color: 'var(--danger)' }} onClick={() => handleDeleteAddress(addr._id)}>Remove</button>
                                                 </div>
                                             </div>
                                         );
@@ -370,7 +369,7 @@ export default function BuyerDashboard() {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <h4 style={{ margin: 0 }}>{addingAddress ? 'Add New Address' : 'Update Profile & Location'}</h4>
                                         {addingAddress && (
-                                            <button className="btn btn-ghost btn-sm" onClick={() => setAddingAddress(false)}>✖ Cancel</button>
+                                            <button className="btn btn-ghost btn-sm" onClick={() => setAddingAddress(false)}>Cancel</button>
                                         )}
                                     </div>
                                     
@@ -391,9 +390,9 @@ export default function BuyerDashboard() {
                                         <div className="form-group" style={{ marginBottom: '8px' }}>
                                             <label className="form-label">Save As</label>
                                             <select className="form-input" value={newAddrTag} onChange={(e) => setNewAddrTag(e.target.value)} style={{ maxWidth: '200px' }}>
-                                                <option value="Home">Home 🏠</option>
-                                                <option value="Work">Work 🏢</option>
-                                                <option value="Other">Other 📍</option>
+                                                <option value="Home">Home</option>
+                                                <option value="Work">Work</option>
+                                                <option value="Other">Other</option>
                                             </select>
                                         </div>
                                     )}
@@ -410,7 +409,7 @@ export default function BuyerDashboard() {
 
                         {/* Danger Zone */}
                         <div className="card" style={{ padding: '32px', border: '1px solid var(--danger, #ff5252)' }}>
-                            <h3 style={{ marginBottom: '8px', color: 'var(--danger, #ff5252)' }}>⚠️ Danger Zone</h3>
+                            <h3 style={{ marginBottom: '8px', color: 'var(--danger, #ff5252)', fontFamily: 'var(--font-display)' }}>Danger Zone</h3>
                             <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '20px' }}>
                                 Permanently delete your account and all associated data including order history. This action <strong>cannot be undone</strong>.
                             </p>
@@ -423,7 +422,7 @@ export default function BuyerDashboard() {
                                     else toast('Account deletion failed', 'error');
                                 }}
                             >
-                                🗑️ Delete My Account
+                                Delete Account
                             </button>
                         </div>
                     </div>
@@ -432,22 +431,22 @@ export default function BuyerDashboard() {
                         {/* Stats */}
                         <div className="stats-grid" style={{ marginBottom: '32px' }}>
                             <div className="stat-card">
-                                <div className="stat-icon green">🛒</div>
+                                <div className="stat-icon green">O</div>
                                 <div className="stat-label">Total Orders</div>
                                 <div className="stat-value">{orders.length}</div>
                             </div>
                             <div className="stat-card">
-                                <div className="stat-icon blue">✅</div>
+                                <div className="stat-icon blue">D</div>
                                 <div className="stat-label">Delivered</div>
                                 <div className="stat-value">{orders.filter(o => o.status === 'delivered').length}</div>
                             </div>
                             <div className="stat-card">
-                                <div className="stat-icon orange">💰</div>
+                                <div className="stat-icon orange">S</div>
                                 <div className="stat-label">Total Spent</div>
-                                <div className="stat-value">₹{orders.reduce((s, o) => s + o.totalAmount, 0).toFixed(0)}</div>
+                                <div className="stat-value" style={{ fontFamily: 'var(--font-mono)' }}>₹{orders.reduce((s, o) => s + o.totalAmount, 0).toFixed(0)}</div>
                             </div>
                             <div className="stat-card">
-                                <div className="stat-icon green">⏳</div>
+                                <div className="stat-icon green">A</div>
                                 <div className="stat-label">Active Orders</div>
                                 <div className="stat-value">{orders.filter(o => !['delivered', 'cancelled'].includes(o.status)).length}</div>
                             </div>
@@ -455,37 +454,36 @@ export default function BuyerDashboard() {
 
                         {/* Quick Actions */}
                         <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', flexWrap: 'wrap' }}>
-                            <a href="/shop" className="btn btn-primary"><span>🛒</span> Browse Shop</a>
-                            <a href="/ai-agent" className="btn btn-secondary"><span>🧠</span> AI Recipe Agent</a>
-                            <button onClick={() => setActiveTab('faceid')} className="btn btn-ghost"><span>🪪</span> Setup Face ID</button>
+                            <a href="/shop" className="btn btn-primary">Browse Shop</a>
+                            <a href="/ai-agent" className="btn btn-secondary">Meal Planner</a>
+                            <button onClick={() => setActiveTab('faceid')} className="btn btn-ghost">Setup Face ID</button>
                         </div>
                         {/* AI Insights + Recent Activity */}
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '32px' }}>
                             <div className="ai-insight-card">
-                                <div className="ai-insight-title">
-                                    <span className="status-online-dot" />
-                                    AI Shopping Insights
+                                <div className="ai-insight-title" style={{ fontFamily: 'var(--font-display)' }}>
+                                    Shopping Insights
                                 </div>
                                 {orders.length > 0 ? (
                                     <>
                                         <div className="ai-insight-item">
-                                            <span>💡</span>
+                                            <span>-</span>
                                             <span>You shop most for <strong>{getMostCommonCategory()}</strong> items — check out the latest deals.</span>
                                         </div>
                                         <div className="ai-insight-item">
-                                            <span>🏪</span>
+                                            <span>-</span>
                                             <span>Your favourite shop: <strong>{getFavoriteShop()}</strong>. New stock may be available.</span>
                                         </div>
                                         <div className="ai-insight-item">
-                                            <span>💰</span>
-                                            <span>Average order value: <strong>₹{getAvgOrder()}</strong>. Use AI Agent to optimise costs.</span>
+                                            <span>-</span>
+                                            <span>Average order value: <strong style={{ fontFamily: 'var(--font-mono)' }}>₹{getAvgOrder()}</strong>. Use Meal Planner to optimise costs.</span>
                                         </div>
                                     </>
                                 ) : (
                                     <>
-                                        <div className="ai-insight-item"><span>🎯</span><span>Try the AI Recipe Agent — describe a meal and we fill your cart instantly.</span></div>
-                                        <div className="ai-insight-item"><span>🔍</span><span>Use intent search — type &quot;I have a cold&quot; to get health-focused suggestions.</span></div>
-                                        <div className="ai-insight-item"><span>🏪</span><span>Enable location to discover the closest shops with real-time stock.</span></div>
+                                        <div className="ai-insight-item"><span>-</span><span>Try the Meal Planner — describe a meal and we fill your cart instantly.</span></div>
+                                        <div className="ai-insight-item"><span>-</span><span>Use natural search — type &quot;I have a cold&quot; to get health-focused suggestions.</span></div>
+                                        <div className="ai-insight-item"><span>-</span><span>Enable location to discover the closest shops with real-time stock.</span></div>
                                     </>
                                 )}
                             </div>
@@ -493,17 +491,17 @@ export default function BuyerDashboard() {
                             {orders.length > 0 && (
                                 <div className="contextual-panel">
                                     <div className="panel-header">
-                                        <span className="panel-title">📋 Recent Activity</span>
+                                        <span className="panel-title" style={{ fontFamily: 'var(--font-display)' }}>Recent Activity</span>
                                         <span className="panel-badge">{orders.length} orders</span>
                                     </div>
                                     <div className="activity-feed">
                                         {orders.slice(0, 3).map((o: any) => (
                                             <div key={o._id} className="activity-item">
-                                                <div className="activity-icon-wrap">
-                                                    {o.status === 'delivered' ? '✅' : o.status === 'cancelled' ? '❌' : '📦'}
+                                                <div className="activity-icon-wrap" style={{ fontWeight: 'bold' }}>
+                                                    {o.status === 'delivered' ? '✓' : o.status === 'cancelled' ? '×' : '-'}
                                                 </div>
                                                 <div className="activity-text">
-                                                    <div className="activity-main">{o.items?.length} items · ₹{o.totalAmount?.toFixed(0)}</div>
+                                                    <div className="activity-main">{o.items?.length} items · <span style={{ fontFamily: 'var(--font-mono)' }}>₹{o.totalAmount?.toFixed(0)}</span></div>
                                                     <div className="activity-sub">{o.status} · {new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
                                                 </div>
                                                 <span className={`badge badge-${statusColor[o.status] || 'blue'}`} style={{ fontSize: '0.65rem' }}>{o.status}</span>
@@ -518,10 +516,10 @@ export default function BuyerDashboard() {
                             <div className="card" style={{ padding: '24px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                                     <div>
-                                        <h3 style={{ margin: 0, marginBottom: '4px' }}>Order Details</h3>
-                                        <span style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--text-muted)' }}>ID: #{selectedOrderId}</span>
+                                        <h3 style={{ margin: 0, marginBottom: '4px', fontFamily: 'var(--font-display)' }}>Order Details</h3>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>ID: #{selectedOrderId}</span>
                                     </div>
-                                    <button className="btn btn-ghost btn-sm" onClick={() => setSelectedOrderId(null)}>⬅ Back to Orders</button>
+                                    <button className="btn btn-ghost btn-sm" onClick={() => setSelectedOrderId(null)}>Back to Orders</button>
                                 </div>
                                 {(() => {
                                     const order = orders.find(o => o._id === selectedOrderId);
@@ -533,31 +531,33 @@ export default function BuyerDashboard() {
                                                 <div className="text-muted" style={{ fontSize: '0.85rem' }}>Placed on {new Date(order.createdAt).toLocaleString('en-IN')}</div>
                                             </div>
 
-                                            <h4 style={{ fontSize: '1.1rem', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>Items ({order.items?.length})</h4>
+                                            <h4 style={{ fontSize: '1.1rem', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px', fontFamily: 'var(--font-display)' }}>Items ({order.items?.length})</h4>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                                {order.items?.map((item: any, i: number) => (
+                                                {order.items?.map((item: any, i: number) => {
+                                                    const itemName = item.name || item.productId?.name || 'Item';
+                                                    return (
                                                     <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)' }}>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                                             {item.image || item.productId?.image ? (
                                                                 <img src={item.image || item.productId?.image} alt="" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: '8px' }} />
-                                                            ) : <div style={{ fontSize: '1.8rem', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', borderRadius: '8px' }}>📦</div>}
+                                                            ) : <div style={{ fontSize: '1.8rem', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', borderRadius: '8px', color: 'var(--text-muted)' }}>{itemName.charAt(0)}</div>}
                                                             <div>
-                                                                <div style={{ fontWeight: 600 }}>{item.name || item.productId?.name}</div>
+                                                                <div style={{ fontWeight: 600 }}>{itemName}</div>
                                                                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                                                    Qty: {item.quantity} · 🏪 {item.shopId?.name || (typeof item.shopId === 'object' ? item.shopId.name : 'Independent Shop')}
+                                                                    Qty: {item.quantity} · from {item.shopId?.name || (typeof item.shopId === 'object' ? item.shopId.name : 'Independent Shop')}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div style={{ textAlign: 'right' }}>
-                                                            <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: '1.1rem' }}>₹{(item.price * item.quantity).toFixed(2)}</div>
-                                                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>₹{item.price} each</div>
+                                                            <div style={{ fontWeight: 800, color: 'var(--accent)', fontSize: '1.1rem', fontFamily: 'var(--font-mono)' }}>₹{(item.price * item.quantity).toFixed(2)}</div>
+                                                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>₹{item.price} each</div>
                                                         </div>
                                                     </div>
-                                                ))}
+                                                )})}
                                             </div>
                                             <div style={{ borderTop: '2px dashed var(--border)', marginTop: '24px', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span style={{ fontSize: '1.1rem', fontWeight: 600 }}>Grand Total</span>
-                                                <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent)' }}>₹{order.totalAmount?.toFixed(2)}</span>
+                                                <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{order.totalAmount?.toFixed(2)}</span>
                                             </div>
                                         </div>
                                     );
@@ -566,14 +566,14 @@ export default function BuyerDashboard() {
                         ) : (
                             <div className="card" style={{ padding: '0' }}>
                                 <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <h3>My Orders</h3>
+                                    <h3 style={{ fontFamily: 'var(--font-display)' }}>My Orders</h3>
                                     <span className="badge badge-blue">{orders.length} total</span>
                                 </div>
                                 {loading ? (
                                     <div style={{ padding: '48px', textAlign: 'center' }}><div className="spinner" style={{ margin: '0 auto' }} /></div>
                                 ) : orders.length === 0 ? (
                                     <div style={{ padding: '48px', textAlign: 'center', color: 'var(--text-muted)' }}>
-                                        <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🛍</div>
+                                        <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>-</div>
                                         <p>No orders yet. Start shopping!</p>
                                         <a href="/shop" className="btn btn-primary btn-sm" style={{ marginTop: '16px' }}>Browse Products</a>
                                     </div>
@@ -586,9 +586,9 @@ export default function BuyerDashboard() {
                                             <tbody>
                                                 {orders.map(o => (
                                                     <tr key={o._id}>
-                                                        <td><span style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--text-muted)' }}>#{o._id.slice(-8)}</span></td>
+                                                        <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)' }}>#{o._id.slice(-8)}</span></td>
                                                         <td><span style={{ fontWeight: 500 }}>{o.items?.length} items</span></td>
-                                                        <td><span style={{ fontWeight: 700, color: 'var(--accent)' }}>₹{o.totalAmount?.toFixed(2)}</span></td>
+                                                        <td><span style={{ fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{o.totalAmount?.toFixed(2)}</span></td>
                                                         <td><span className={`badge badge-${statusColor[o.status] || 'blue'}`}>{o.status}</span></td>
                                                         <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
                                                         <td style={{ textAlign: 'right' }}><button onClick={() => setSelectedOrderId(o._id)} className="btn btn-ghost btn-sm" style={{ padding: '4px 10px', fontSize: '0.8rem' }}>View</button></td>

@@ -107,11 +107,11 @@ export default function SellerDashboard() {
                 const { _id, ...updatePayload } = payload;
                 const { data } = await api.put(`/products/${_id}`, updatePayload);
                 setProducts(p => p.map(prod => prod._id === _id ? data.product : prod));
-                toast('Product updated! ✅', 'success');
+                toast('Product updated!', 'success');
             } else {
                 const { data } = await api.post('/products', payload);
                 setProducts(p => [...p, data.product]);
-                toast('Product added! ✅', 'success');
+                toast('Product added!', 'success');
             }
 
             setNewProduct({ name: '', price: '', stock: '', category: '', unit: 'piece', weight: '', barcode: '', image: '', description: '', expiryDate: '' });
@@ -231,7 +231,7 @@ export default function SellerDashboard() {
             const { data } = await api.post('/shops', finalForm);
             setShop(data.shop);
             setShopEdit({ name: data.shop.name, address: data.shop.location?.address || '', phone: data.shop.phone || '' });
-            toast('Your shop is live! 🎉', 'success');
+            toast('Your shop is live!', 'success');
         } catch (err: any) {
             toast(err?.response?.data?.message || 'Failed to create shop', 'error');
         } finally {
@@ -288,7 +288,7 @@ export default function SellerDashboard() {
             const result = reader.decodeFromCanvas(canvas);
             const code = result.getText();
             stopScanner();
-            toast(`Barcode scanned: ${code} ✅. Checking details...`, 'info');
+            toast(`Barcode scanned: ${code}. Checking details...`, 'info');
 
             try {
                 const res = await api.post('/products/barcode/lookup', { barcode: code });
@@ -344,7 +344,7 @@ export default function SellerDashboard() {
             setScanning(false);
             setCapturing(false);
 
-            toast(`Barcode found from image: ${code} ✅. Checking details...`, 'info');
+            toast(`Barcode found from image: ${code}. Checking details...`, 'info');
 
             try {
                 const res = await api.post('/products/barcode/lookup', { barcode: code });
@@ -387,7 +387,7 @@ export default function SellerDashboard() {
             try {
                 await api.post('/products/barcode/update', { barcode, stockDelta: 1 });
                 setProducts(prev => prev.map(p => p._id === product._id ? { ...p, stock: p.stock + 1 } : p));
-                toast(`Stock for ${product.name} increased by 1 ✅`, 'success');
+                toast(`Stock for ${product.name} increased by 1`, 'success');
             } catch (err: any) {
                 toast(err?.response?.data?.message || 'Failed to update stock', 'error');
             }
@@ -501,7 +501,7 @@ export default function SellerDashboard() {
 
             const { data } = await api.put('/shops/my', payload);
             setShop(data.shop);
-            toast('Shop updated! ✅', 'success');
+            toast('Shop updated!', 'success');
         } catch (err: any) {
             toast(err?.response?.data?.message || 'Update failed', 'error');
         } finally {
@@ -536,22 +536,22 @@ export default function SellerDashboard() {
     const outOfStockCount = products.filter(p => p.stock === 0).length;
 
     const sidebarLinks = [
-        { id: 'overview', icon: '📊', label: 'Overview' },
-        { id: 'inventory', icon: '📦', label: 'Inventory' },
-        { id: 'storeboard', icon: '⚡', label: 'Live Storeboard' },
-        { id: 'orders', icon: '📋', label: 'Orders' },
-        { id: 'barcode', icon: '🔲', label: 'Barcode Scanner' },
-        { id: 'settings', icon: '⚙️', label: 'Shop Settings' },
+        { id: 'overview', icon: '', label: 'Overview' },
+        { id: 'inventory', icon: '', label: 'Inventory' },
+        { id: 'storeboard', icon: '', label: 'Live Storeboard' },
+        { id: 'orders', icon: '', label: 'Orders' },
+        { id: 'barcode', icon: '', label: 'Barcode Scanner' },
+        { id: 'settings', icon: '', label: 'Shop Settings' },
     ];
 
-    // ✅ FIX: If seller has no shop yet, show an onboarding setup screen
+    //  FIX: If seller has no shop yet, show an onboarding setup screen
     if (!loading && !shop) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', background: 'radial-gradient(ellipse at 50% 0%, rgba(255,107,53,0.08) 0%, transparent 60%)' }}>
                 <div style={{ width: '100%', maxWidth: '460px' }}>
                     <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                        <div style={{ fontSize: '4rem', marginBottom: '16px' }}>🏪</div>
-                        <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>Set Up Your Shop</h1>
+                        <div style={{ fontSize: '2rem', marginBottom: '16px', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Setup</div>
+                        <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' , fontFamily: "var(--font-display)"}}>Set Up Your Shop</h1>
                         <p className="text-muted">You don&apos;t have a shop yet. Create one to start selling!</p>
                     </div>
                     <div className="card" style={{ padding: '32px' }}>
@@ -593,12 +593,12 @@ export default function SellerDashboard() {
                             </div>
                             <div className="form-group">
                                 <button type="button" onClick={() => setShowMapSetup(true)} style={{ width: '100%', padding: '10px', borderRadius: 'var(--radius-md)', background: shopSetup.location ? 'var(--accent-subtle)' : 'var(--bg-elevated)', border: `1px solid ${shopSetup.location ? 'var(--accent)' : 'var(--border)'}`, color: shopSetup.location ? 'var(--accent)' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600, transition: 'var(--transition)' }}>
-                                    {shopSetup.location ? '📍 Exact Coordinates Mapped' : '📍 Pinpoint Location on Map'}
+                                    {shopSetup.location ? 'Location mapped' : 'Set location on map'}
                                 </button>
                                 <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 8 }}>Pinpoint precision ensures you appear in nearby buyer searches.</p>
                             </div>
                             <button type="submit" className="btn btn-primary btn-lg" disabled={creatingShop} style={{ marginTop: '8px' }}>
-                                {creatingShop ? '⏳ Creating...' : '🚀 Launch My Shop'}
+                                {creatingShop ? 'Creating...' : 'Create Shop'}
                             </button>
                         </form>
                     </div>
@@ -638,8 +638,8 @@ export default function SellerDashboard() {
 
             <aside className="sidebar">
                 <div style={{ padding: '0 12px 20px' }}>
-                    <div style={{ width: 52, height: 52, background: 'linear-gradient(135deg, #ff6b35, #f7c59f)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', marginBottom: '12px' }}>
-                        🏪
+                    <div style={{ width: 52, height: 52, background: 'var(--bg-elevated)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', marginBottom: '12px' }}>
+                        {shop?.name ? shop.name.charAt(0).toUpperCase() : 'S'}
                     </div>
                     <div style={{ fontWeight: 700 }}>{shop?.name || 'My Shop'}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{user?.email}</div>
@@ -648,7 +648,7 @@ export default function SellerDashboard() {
                 <div className="sidebar-section-label">Manage</div>
                 {sidebarLinks.map(l => (
                     <button key={l.id} onClick={() => setTab(l.id as any)} className={`sidebar-link ${tab === l.id ? 'active' : ''}`}>
-                        <span className="link-icon">{l.icon}</span> {l.label}
+                        {l.label}
                     </button>
                 ))}
             </aside>
@@ -659,40 +659,40 @@ export default function SellerDashboard() {
                         {tab === 'overview' && (
                             <>
                                 <div style={{ marginBottom: '28px' }}>
-                                    <h1 style={{ fontSize: '1.75rem', marginBottom: '6px' }}>Seller Dashboard 🏪</h1>
+                                    <h1 style={{ fontSize: '1.75rem', marginBottom: '6px' , fontFamily: "var(--font-display)"}}>Dashboard</h1>
                                     <p className="text-muted">{shop?.name} · {shop?.location?.address || 'No address set'}</p>
                                 </div>
 
                                 {/* Today's highlights */}
                                 <div className="today-grid">
                                     <div className="today-card">
-                                        <div className="today-icon green">📦</div>
+                                        <div className="today-icon green">—</div>
                                         <div><div className="today-val">{todayOrders.length}</div><div className="today-lbl">Orders Today</div></div>
                                     </div>
                                     <div className="today-card">
-                                        <div className="today-icon blue">💸</div>
-                                        <div><div className="today-val">₹{todayRevenue.toFixed(0)}</div><div className="today-lbl">Revenue Today</div></div>
+                                        <div className="today-icon blue">—</div>
+                                        <div><div className="today-val" style={{ fontFamily: 'var(--font-mono)' }}>₹{todayRevenue.toFixed(0)}</div><div className="today-lbl">Revenue Today</div></div>
                                     </div>
                                     <div className="today-card">
-                                        <div className="today-icon orange">⚠️</div>
+                                        <div className="today-icon orange">—</div>
                                         <div><div className="today-val">{lowStockCount}</div><div className="today-lbl">Low Stock Items</div></div>
                                     </div>
                                     <div className="today-card">
-                                        <div className="today-icon red">❌</div>
+                                        <div className="today-icon red">—</div>
                                         <div><div className="today-val">{outOfStockCount}</div><div className="today-lbl">Out of Stock</div></div>
                                     </div>
                                 </div>
 
                                 <div className="stats-grid" style={{ marginBottom: '28px' }}>
-                                    <div className="stat-card"><div className="stat-icon orange">📦</div><div className="stat-label">Total Products</div><div className="stat-value">{products.length}</div></div>
-                                    <div className="stat-card"><div className="stat-icon green">💰</div><div className="stat-label">Total Revenue</div><div className="stat-value">₹{totalRevenue.toFixed(0)}</div></div>
-                                    <div className="stat-card"><div className="stat-icon blue">📋</div><div className="stat-label">Total Orders</div><div className="stat-value">{orders.length}</div></div>
-                                    <div className="stat-card"><div className="stat-icon red">⚠️</div><div className="stat-label">Low Stock</div><div className="stat-value">{products.filter(p => p.stock < 5).length}</div></div>
+                                    <div className="stat-card"><div className="stat-icon orange">—</div><div className="stat-label">Total Products</div><div className="stat-value">{products.length}</div></div>
+                                    <div className="stat-card"><div className="stat-icon green">—</div><div className="stat-label">Total Revenue</div><div className="stat-value" style={{ fontFamily: 'var(--font-mono)' }}>₹{totalRevenue.toFixed(0)}</div></div>
+                                    <div className="stat-card"><div className="stat-icon blue">—</div><div className="stat-label">Total Orders</div><div className="stat-value">{orders.length}</div></div>
+                                    <div className="stat-card"><div className="stat-icon red">—</div><div className="stat-label">Low Stock</div><div className="stat-value">{products.filter(p => p.stock < 5).length}</div></div>
                                 </div>
 
                                 {products.filter(p => p.stock < 5).length > 0 && (
                                     <div className="card" style={{ padding: '20px', marginBottom: '28px', borderLeft: '4px solid var(--danger)' }}>
-                                        <h3 style={{ marginBottom: '16px', color: 'var(--danger)' }}>⚠️ Low Stock Alerts</h3>
+                                        <h3 style={{ marginBottom: '16px', color: 'var(--danger)' , fontFamily: "var(--font-display)"}}>⚠️ Low Stock Alerts</h3>
                                         {products.filter(p => p.stock < 5).map(p => (
                                             <div key={p._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
                                                 <span style={{ fontWeight: 500 }}>{p.name} <span className="text-muted" style={{ fontSize: '0.8rem' }}>({p.category})</span></span>
@@ -703,7 +703,7 @@ export default function SellerDashboard() {
                                 )}
 
                                 <div className="card" style={{ padding: '20px' }}>
-                                    <h3 style={{ marginBottom: '16px' }}>Top Products by Sales</h3>
+                                    <h3 style={{ marginBottom: '16px' , fontFamily: "var(--font-display)"}}>Top Products by Sales</h3>
                                     {products.sort((a, b) => b.salesCount - a.salesCount).slice(0, 5).map(p => (
                                         <div key={p._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
                                             <span style={{ fontWeight: 500 }}>{p.name}</span>
@@ -719,7 +719,7 @@ export default function SellerDashboard() {
                                 {/* Recent orders */}
                                 {orders.length > 0 && (
                                     <div className="card" style={{ padding: '20px', marginTop: '24px' }}>
-                                        <h3 style={{ marginBottom: '16px' }}>🕐 Recent Orders</h3>
+                                        <h3 style={{ marginBottom: '16px' , fontFamily: "var(--font-display)"}}>🕐 Recent Orders</h3>
                                         {orders.slice(0, 5).map((o: any) => (
                                             <div key={o._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
                                                 <div>
@@ -731,7 +731,7 @@ export default function SellerDashboard() {
                                                     </div>
                                                 </div>
                                                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                                    <span style={{ fontWeight: 700, color: 'var(--accent)' }}>₹{o.totalAmount?.toFixed(0)}</span>
+                                                    <span style={{ fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{o.totalAmount?.toFixed(0)}</span>
                                                     <span className="badge badge-green" style={{ fontSize: '0.7rem' }}>{o.status}</span>
                                                 </div>
                                             </div>
@@ -744,7 +744,7 @@ export default function SellerDashboard() {
                         {tab === 'storeboard' && (
                             <>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                                    <h2>⚡ Live Storeboard</h2>
+                                    <h2 style={{ fontFamily: "var(--font-display)" }}>Live Feed</h2>
                                     <div className="badge badge-red" style={{ animation: 'pulse 1.5s infinite' }}>● LIVE</div>
                                 </div>
 
@@ -752,7 +752,7 @@ export default function SellerDashboard() {
                                     {/* Left: Charts */}
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                         <div className="card" style={{ padding: '24px' }}>
-                                            <h3 style={{ marginBottom: '16px' }}>🔥 Fastest Selling Items across City</h3>
+                                            <h3 style={{ marginBottom: '16px' , fontFamily: "var(--font-display)"}}>🔥 Fastest Selling Items across City</h3>
                                             <div style={{ height: 280, width: '100%' }}>
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <BarChart data={storeboardData.fastestSelling} layout="vertical" margin={{ top: 0, right: 30, left: 40, bottom: 0 }}>
@@ -770,7 +770,7 @@ export default function SellerDashboard() {
                                         </div>
 
                                         <div className="card" style={{ padding: '24px' }}>
-                                            <h3 style={{ marginBottom: '16px' }}>⭐ Top Rated Shops</h3>
+                                            <h3 style={{ marginBottom: '16px' , fontFamily: "var(--font-display)"}}>⭐ Top Rated Shops</h3>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                                 {storeboardData.topRatedShops.map((s: any, i: number) => (
                                                     <div key={s._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)' }}>
@@ -793,7 +793,7 @@ export default function SellerDashboard() {
 
                                     {/* Right: Live Feed */}
                                     <div className="card" style={{ padding: '20px', background: 'var(--bg-card)', border: '2px solid var(--accent-subtle)' }}>
-                                        <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>📡 Live Feed {liveEvents.length > 0 && <span className="spinner" style={{ width: 12, height: 12, borderWidth: 2 }} />}</h3>
+                                        <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' , fontFamily: "var(--font-display)"}}>📡 Live Feed {liveEvents.length > 0 && <span className="spinner" style={{ width: 12, height: 12, borderWidth: 2 }} />}</h3>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                             {liveEvents.length === 0 ? (
                                                 <div className="text-muted" style={{ padding: '20px', textAlign: 'center' }}>Waiting for new orders...</div>
@@ -803,7 +803,7 @@ export default function SellerDashboard() {
                                                         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                                                             Just now • Order #{evt.order?.slice(-6)}
                                                         </div>
-                                                        <div style={{ fontWeight: 600, color: 'var(--accent)' }}>₹{evt.totalAmount?.toFixed(2)}</div>
+                                                        <div style={{ fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{evt.totalAmount?.toFixed(2)}</div>
                                                         <div style={{ fontSize: '0.85rem', marginTop: '6px' }}>
                                                             {evt.shopGroups?.map((sg: any) => `${sg.items.length} items from ${sg.shopName || 'Shop'}`).join(' & ')}
                                                         </div>
@@ -818,10 +818,10 @@ export default function SellerDashboard() {
                                 <div className="card" style={{ padding: '24px', marginTop: '24px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                                         <div>
-                                            <h3>🗺️ The Money Map</h3>
+                                            <h3 style={{ fontFamily: "var(--font-display)" }}>Revenue Map</h3>
                                             <p className="text-muted" style={{ fontSize: '0.85rem' }}>Geospatial heatmap of city-wide orders. See where demand is highest to plan your next dark store.</p>
                                         </div>
-                                        <div className="badge badge-blue">Data Science</div>
+                                        
                                     </div>
                                     <div style={{ width: '100%', height: 400, background: 'var(--bg-elevated)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
                                         {storeboardData.heatmapData && storeboardData.heatmapData.length > 0 ? (
@@ -839,13 +839,13 @@ export default function SellerDashboard() {
                         {tab === 'inventory' && (
                             <>
                                 <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <h2>Inventory Management</h2>
+                                    <h2 style={{ fontFamily: "var(--font-display)" }}>Inventory Management</h2>
                                 </div>
                                 {/* Add Product Form */}
                                 <div className="card" style={{ marginBottom: '24px' }}>
-                                    <h3 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <h3 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' , fontFamily: "var(--font-display)"}}>
                                         <span>
-                                            {(newProduct as any)._id ? '✏️ Edit Product' : '➕ Add Product'}
+                                            {(newProduct as any)._id ? 'Edit Product' : 'Add Product'}
                                             {newProduct.barcode && <span className="badge badge-green" style={{ marginLeft: 8 }}>Barcode: {newProduct.barcode}</span>}
                                         </span>
                                         {(newProduct as any)._id && (
@@ -866,7 +866,7 @@ export default function SellerDashboard() {
                                             {newProduct.image ? (
                                                 <img src={newProduct.image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23ddd"/><text x="50" y="50" font-family="sans-serif" font-size="12" fill="%23888" text-anchor="middle" alignment-baseline="middle">Invalid Image</text></svg>'; }} />
                                             ) : (
-                                                <div style={{ color: 'var(--text-muted)', fontSize: '2rem' }}>🖼️</div>
+                                                <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>No image</div>
                                             )}
                                         </div>
                                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -968,14 +968,14 @@ export default function SellerDashboard() {
                                             <div className="form-group"><label className="form-label">Barcode (Optional)</label>
                                                 <div style={{ display: 'flex', gap: '8px' }}>
                                                     <input className="form-input" placeholder="Scan or enter" value={newProduct.barcode} onChange={e => setNewProduct(p => ({ ...p, barcode: e.target.value }))} />
-                                                    <button type="button" className="btn btn-secondary" onClick={generateDemoBarcode} title="Generate Demo Barcode">🎲</button>
+                                                    <button type="button" className="btn btn-secondary" onClick={generateDemoBarcode} title="Generate Demo Barcode">Gen</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="form-group" style={{ marginBottom: '16px' }}><label className="form-label">Description</label><input className="form-input" placeholder="Brief product description..." value={newProduct.description} onChange={e => setNewProduct(p => ({ ...p, description: e.target.value }))} /></div>
                                         <div style={{ display: 'flex', gap: '12px' }}>
                                             <button type="submit" className="btn btn-primary">{(newProduct as any)._id ? 'Update Product' : 'Add Product'}</button>
-                                            <button type="button" className="btn btn-secondary" onClick={() => setTab('barcode')}>🔲 Scan Barcode</button>
+                                            <button type="button" className="btn btn-secondary" onClick={() => setTab('barcode')}>Scan Barcode</button>
                                         </div>
                                     </form>
                                 </div>
@@ -983,7 +983,7 @@ export default function SellerDashboard() {
                                 {/* Products Table */}
                                 <div className="card" style={{ padding: 0 }}>
                                     <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
-                                        <h3>All Products ({products.length})</h3>
+                                        <h3 style={{ fontFamily: "var(--font-display)" }}>All Products ({products.length})</h3>
                                     </div>
                                     <div className="table-wrap">
                                         <table className="table">
@@ -995,7 +995,7 @@ export default function SellerDashboard() {
                                                             {p.image ? (
                                                                 <img src={p.image} alt={p.name} style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', objectFit: 'contain', background: 'var(--bg-elevated)' }} />
                                                             ) : (
-                                                                <div style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', background: 'var(--bg-elevated)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>📦</div>
+                                                                <div style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', background: 'var(--bg-elevated)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 600 }}>{p.name.charAt(0)}</div>
                                                             )}
                                                             <div>
                                                                 <div style={{ fontWeight: 500 }}>{p.name}</div>
@@ -1007,7 +1007,7 @@ export default function SellerDashboard() {
                                                             </div>
                                                         </td>
                                                         <td><span className="badge badge-blue">{p.category}</span></td>
-                                                        <td style={{ color: 'var(--accent)', fontWeight: 700 }}>₹{p.price}</td>
+                                                        <td style={{ color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>₹{p.price}</td>
                                                         <td><span style={{ color: p.stock < 5 ? 'var(--danger)' : 'var(--text-primary)', fontWeight: 600 }}>{p.stock} units</span></td>
                                                         <td>{p.salesCount}</td>
                                                         <td>
@@ -1031,14 +1031,14 @@ export default function SellerDashboard() {
                                                                         window.scrollTo({ top: 0, behavior: 'smooth' });
                                                                     }}
                                                                 >
-                                                                    ✏️ Edit
+                                                                    Edit
                                                                 </button>
                                                                 <button
                                                                     className="btn btn-sm"
                                                                     style={{ color: 'var(--danger)', border: '1px solid var(--danger)', background: 'transparent' }}
                                                                     onClick={() => handleDeleteProduct(p._id, p.name)}
                                                                 >
-                                                                    🗑️ Delete
+                                                                    Delete
                                                                 </button>
                                                             </div>
                                                         </td>
@@ -1054,7 +1054,7 @@ export default function SellerDashboard() {
 
                         {tab === 'orders' && (
                             <>
-                                <h2 style={{ marginBottom: '24px' }}>Shop Orders</h2>
+                                <h2 style={{ marginBottom: '24px' , fontFamily: "var(--font-display)"}}>Shop Orders</h2>
                                 <div className="card" style={{ padding: 0 }}>
                                     <div className="table-wrap">
                                         <table className="table">
@@ -1065,7 +1065,7 @@ export default function SellerDashboard() {
                                                         <td style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>#{o._id.slice(-8)}</td>
                                                         <td>{o.buyerId?.name || 'Customer'}</td>
                                                         <td>{o.items?.length} items</td>
-                                                        <td style={{ color: 'var(--accent)', fontWeight: 700 }}>₹{o.totalAmount?.toFixed(2)}</td>
+                                                        <td style={{ color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>₹{o.totalAmount?.toFixed(2)}</td>
                                                         <td><span className="badge badge-green">{o.status}</span></td>
                                                         <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
                                                     </tr>
@@ -1080,11 +1080,11 @@ export default function SellerDashboard() {
 
                         {tab === 'barcode' && (
                             <div className="tab-content-centered">
-                                <h2 style={{ marginBottom: '24px' }}>🔲 Barcode Scanner</h2>
+                                <h2 style={{ marginBottom: '24px' , fontFamily: "var(--font-display)"}}>🔲 Barcode Scanner</h2>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '24px', alignItems: 'start' }}>
                                     {/* Scanner card */}
                                     <div className="card" style={{ padding: '24px' }}>
-                                        <h3 style={{ marginBottom: '8px' }}>Scan Product Barcode</h3>
+                                        <h3 style={{ marginBottom: '8px' , fontFamily: "var(--font-display)"}}>Scan Product Barcode</h3>
                                         <p className="text-muted" style={{ marginBottom: '20px', fontSize: '0.875rem' }}>
                                             Start the camera, point it at the barcode, then click <strong>Capture</strong> when it&apos;s in frame.
                                         </p>
@@ -1092,7 +1092,7 @@ export default function SellerDashboard() {
                                         {/* Live camera preview */}
                                         <div style={{ width: '100%', aspectRatio: '4/3', background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)', overflow: 'hidden', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', border: scanning ? '2px solid var(--accent)' : '2px solid var(--border)', transition: 'border-color 0.3s' }}>
                                             <video ref={videoRef} muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: scanning ? 'block' : 'none' }} />
-                                            {!scanning && <span style={{ fontSize: '3.5rem', opacity: 0.4 }}>🔲</span>}
+                                            {!scanning && <span style={{ fontSize: '3.5rem', opacity: 0.4, fontSize: '1rem', fontWeight: 500 }}>Camera</span>}
                                             {scanning && (
                                                 <>
                                                     {/* Animated sweep line */}
@@ -1115,19 +1115,19 @@ export default function SellerDashboard() {
                                         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
                                             {!scanning ? (
                                                 <>
-                                                    <button className="btn btn-primary" onClick={startBarcodeScanner}>📷 Start Camera</button>
+                                                    <button className="btn btn-primary" onClick={startBarcodeScanner}>Start Camera</button>
                                                     <span className="text-muted" style={{ fontSize: '0.875rem' }}>or</span>
                                                     <label className="btn btn-secondary" style={{ cursor: 'pointer', margin: 0 }}>
-                                                        📁 Upload Image
+                                                        Upload Image
                                                         <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
                                                     </label>
                                                 </>
                                             ) : (
                                                 <>
                                                     <button className="btn btn-primary" onClick={captureAndDecode} disabled={capturing} style={{ flex: 2 }}>
-                                                        {capturing ? <><span className="spinner" style={{ width: 14, height: 14 }} /> Processing...</> : '📸 Capture'}
+                                                        {capturing ? <><span className="spinner" style={{ width: 14, height: 14 }} /> Processing...</> : 'Capture'}
                                                     </button>
-                                                    <button className="btn btn-danger" onClick={stopScanner}>⏹ Stop</button>
+                                                    <button className="btn btn-danger" onClick={stopScanner}>Stop</button>
                                                 </>
                                             )}
                                             <button className="btn btn-secondary" onClick={() => { stopScanner(); setTab('inventory'); }} style={{ marginLeft: scanning ? 0 : 'auto' }}>← Back to Inventory</button>
@@ -1138,7 +1138,7 @@ export default function SellerDashboard() {
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                         <div className="card" style={{ padding: '20px', borderLeft: '3px solid var(--accent)' }}>
                                             <h4 style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <span style={{ fontSize: '1.3rem' }}>💡</span> Scan Tips
+                                                <span style={{ fontSize: '1rem', fontWeight: 600 }}>Tips</span>
                                             </h4>
                                             {[
                                                 'Hold the camera ~15–20 cm from the barcode.',
@@ -1155,7 +1155,7 @@ export default function SellerDashboard() {
 
                                         <div className="card" style={{ padding: '20px' }}>
                                             <h4 style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <span style={{ fontSize: '1.3rem' }}>📑</span> Supported Formats
+                                                <span style={{ fontSize: '1rem', fontWeight: 600 }}>Formats</span>
                                             </h4>
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                                 {['EAN-13', 'EAN-8', 'UPC-A', 'UPC-E', 'Code 128', 'Code 39', 'QR Code', 'PDF417'].map(fmt => (
@@ -1165,7 +1165,7 @@ export default function SellerDashboard() {
                                         </div>
 
                                         <div className="card" style={{ padding: '20px', background: 'var(--accent-subtle)', border: '1px solid rgba(0,210,106,0.2)' }}>
-                                            <h4 style={{ marginBottom: '8px', color: 'var(--accent)' }}>🧠 What happens after scan?</h4>
+                                            <h4 style={{ marginBottom: '8px', color: 'var(--accent)' }}>What happens after scan?</h4>
                                             <p style={{ fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                                                 We look up the barcode in our database first. If found, you can update stock instantly. If new, we try to auto-fill product details from external sources. If nothing matches, you manually enter details.
                                             </p>
@@ -1177,9 +1177,9 @@ export default function SellerDashboard() {
 
                         {tab === 'settings' && (
                             <div className="tab-content-centered">
-                                <h2 style={{ marginBottom: '24px' }}>⚙️ Shop Settings</h2>
+                                <h2 style={{ marginBottom: '24px' , fontFamily: "var(--font-display)"}}>⚙️ Shop Settings</h2>
                                 <div className="card" style={{ maxWidth: '520px' }}>
-                                    <h3 style={{ marginBottom: '20px' }}>Edit Shop Profile</h3>
+                                    <h3 style={{ marginBottom: '20px' , fontFamily: "var(--font-display)"}}>Edit Shop Profile</h3>
                                     <form onSubmit={handleSaveShop} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                         <div className="form-group">
                                             <label className="form-label">Shop Name</label>
@@ -1214,27 +1214,27 @@ export default function SellerDashboard() {
                                         <div className="form-group" style={{ marginBottom: '16px' }}>
                                             <label className="form-label">Exact GPS Location</label>
                                             <button type="button" onClick={() => setShowMapEdit(true)} style={{ width: '100%', padding: '10px', borderRadius: 'var(--radius-md)', background: shopEdit.location ? 'var(--accent-subtle)' : 'var(--bg-elevated)', border: `1px solid ${shopEdit.location ? 'var(--accent)' : 'var(--border)'}`, color: shopEdit.location ? 'var(--accent)' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600, transition: 'var(--transition)' }}>
-                                                {shopEdit.location ? '📍 Coordinates Mapped' : '📍 Pinpoint Location on Map'}
+                                                {shopEdit.location ? '📍 Coordinates Mapped' : 'Set location on map'}
                                             </button>
                                             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 8 }}>Pinpoint precision ensures you only receive orders from nearby buyers.</p>
                                         </div>
 
                                         <button type="submit" className="btn btn-primary" disabled={savingShop}>
-                                            {savingShop ? '⏳ Saving...' : '💾 Save Changes'}
+                                            {savingShop ? 'Saving...' : 'Save Changes'}
                                         </button>
                                     </form>
                                 </div>
 
                                 {/* Face ID Enrollment */}
                                 <div className="card" style={{ maxWidth: '520px', marginTop: '24px' }}>
-                                    <h3 style={{ marginBottom: '8px' }}>🪪 Face ID Setup</h3>
+                                    <h3 style={{ marginBottom: '8px' , fontFamily: "var(--font-display)"}}>🪪 Face ID Setup</h3>
                                     <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '20px' }}>Enroll or update your Face ID to allow instant camera-based login to your seller dashboard.</p>
                                     <FaceRegister userRole="seller" onSkip={() => { }} />
                                 </div>
 
                                 {/* Danger Zone */}
                                 <div className="card" style={{ maxWidth: '520px', marginTop: '24px', border: '1px solid var(--danger, #ff5252)' }}>
-                                    <h3 style={{ marginBottom: '8px', color: 'var(--danger, #ff5252)' }}>⚠️ Danger Zone</h3>
+                                    <h3 style={{ marginBottom: '8px', color: 'var(--danger, #ff5252)' , fontFamily: "var(--font-display)"}}>⚠️ Danger Zone</h3>
                                     <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '20px' }}>
                                         Permanently delete your seller account and shop. All products and orders will be removed. This action <strong>cannot be undone</strong>.
                                     </p>
@@ -1247,7 +1247,7 @@ export default function SellerDashboard() {
                                             else toast('Account deletion failed', 'error');
                                         }}
                                     >
-                                        🗑️ Delete Account & Shop
+                                        Delete Account & Shop
                                     </button>
                                 </div>
                             </div>
@@ -1268,11 +1268,9 @@ export default function SellerDashboard() {
                         border: '1px solid var(--border)', animation: 'slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                     }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255, 107, 53, 0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0 }}>
-                                📦
-                            </div>
+                            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255, 107, 53, 0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0, fontWeight: 700 }}>{existingProductPrompt.product.name.charAt(0)}</div>
                             <div>
-                                <h2 style={{ fontSize: '1.25rem', marginBottom: '4px' }}>Product Already Exists</h2>
+                                <h2 style={{ fontSize: '1.25rem', marginBottom: '4px' , fontFamily: "var(--font-display)"}}>Product Already Exists</h2>
                                 <p className="text-muted" style={{ fontSize: '0.875rem' }}>Barcode: {existingProductPrompt.barcode}</p>
                             </div>
                         </div>
@@ -1295,11 +1293,11 @@ export default function SellerDashboard() {
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             <button className="btn btn-primary btn-lg" onClick={() => handlePromptAction('increase')} style={{ width: '100%', justifyContent: 'center' }}>
-                                ➕ Fast Stock (+1)
+                                Fast Stock (+1)
                             </button>
                             <div style={{ display: 'flex', gap: '12px' }}>
                                 <button className="btn btn-secondary" onClick={() => handlePromptAction('edit')} style={{ flex: 1, justifyContent: 'center' }}>
-                                    ✏️ Edit Details
+                                    Edit Details
                                 </button>
                                 <button className="btn" onClick={() => handlePromptAction('cancel')} style={{ flex: 1, justifyContent: 'center', background: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}>
                                     Cancel

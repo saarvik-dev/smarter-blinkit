@@ -1,5 +1,3 @@
-//trigger redeployment 2
-
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
@@ -81,9 +79,9 @@ export default function MoneyMapPage() {
                 const popupHtml = (shop: any) => `
                     <div class="sales-popup-card">
                         <div class="sales-popup-title">${shop.shopName || 'Shop'}</div>
-                        <div class="sales-popup-row"><span>📦</span><span>Sales: <strong>${shop.totalSales || 0}</strong></span></div>
-                        <div class="sales-popup-row"><span>💰</span><span>Revenue: <strong>₹${Number(shop.totalRevenue || 0).toFixed(0)}</strong></span></div>
-                        <div class="sales-popup-row"><span>📍</span><span>${shop.address || 'Bengaluru'}</span></div>
+                        <div class="sales-popup-row"><span class="popup-label">Sales:</span> <strong>${shop.totalSales || 0}</strong></div>
+                        <div class="sales-popup-row"><span class="popup-label">Revenue:</span> <strong>₹${Number(shop.totalRevenue || 0).toFixed(0)}</strong></div>
+                        <div class="sales-popup-row"><span class="popup-label">Location:</span> <span>${shop.address || 'Bengaluru'}</span></div>
                     </div>
                 `;
 
@@ -220,9 +218,9 @@ export default function MoneyMapPage() {
                         marker.bindPopup(`
                             <div class="sales-popup-card">
                                 <div class="sales-popup-title">${shop.name}</div>
-                                <div class="sales-popup-row"><span>📦</span><span>Sales: <strong>${shop.sales}</strong></span></div>
-                                <div class="sales-popup-row"><span>💰</span><span>Est. Revenue: <strong>₹${shop.revenue}</strong></span></div>
-                                <div class="sales-popup-row"><span>💡</span><span>Place more orders to see live data</span></div>
+                                <div class="sales-popup-row"><span class="popup-label">Sales:</span> <strong>${shop.sales}</strong></div>
+                                <div class="sales-popup-row"><span class="popup-label">Est. Revenue:</span> <strong>₹${shop.revenue}</strong></div>
+                                <div class="sales-popup-row"><span class="popup-label">Info:</span> <span>Place more orders to see live data</span></div>
                             </div>
                         `, { className: 'money-map-popup' });
                     });
@@ -240,31 +238,29 @@ export default function MoneyMapPage() {
         <>
             <Navbar />
             <main style={{ paddingTop: 64, minHeight: '100vh', position: 'relative' }}>
-                {/* Ambient mesh background */}
-                <div className="mesh-hero" style={{ position: 'fixed' }} />
                 <div className="container" style={{ padding: '36px 24px' }}>
                     {/* Header */}
                     <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ marginBottom: 28 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: 8 }}>
-                            <h1 style={{ fontSize: '2rem', marginBottom: 0 }}>🗺 Money Map</h1>
+                            <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: '1.4rem', marginBottom: 0 }}>Revenue Map</h1>
                             {!loading && heatmapData.length > 0 && (
-                                <span className="activity-signal"><span className="signal-dot" />{heatmapData.length} active shops</span>
+                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>[{heatmapData.length} active shops]</span>
                             )}
                         </div>
-                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>Neighbourhood-level purchasing heatmap · Bubble size = revenue · Colour = intensity</p>
+                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>Revenue by location · bubble size tracks sales volume</p>
                     </motion.div>
 
                     {/* Stats */}
                     <motion.div variants={staggerContainer} initial="hidden" animate="visible">
                         <div className="stats-grid" style={{ marginBottom: 28 }}>
                             {[
-                                { icon: '💰', iconClass: 'green', label: 'Total Revenue (mapped)', value: `₹${stats.totalRevenue.toFixed(0)}` },
-                                { icon: '📦', iconClass: 'blue', label: 'Total Units Sold', value: String(stats.totalSales) },
-                                { icon: '🏆', iconClass: 'orange', label: 'Top Shop', value: stats.topShop || '—', small: true },
-                                { icon: '🏪', iconClass: 'green', label: 'Active Locations', value: String(heatmapData.length || 2) },
+                                { icon: 'REV', label: 'Total Revenue (mapped)', value: `₹${stats.totalRevenue.toFixed(0)}` },
+                                { icon: 'VOL', label: 'Total Units Sold', value: String(stats.totalSales) },
+                                { icon: 'TOP', label: 'Top Shop', value: stats.topShop || '—', small: true },
+                                { icon: 'LOC', label: 'Active Locations', value: String(heatmapData.length || 2) },
                             ].map((s, i) => (
-                                <motion.div key={s.label} variants={scaleIn} className="stat-card depth-card">
-                                    <div className={`stat-icon ${s.iconClass}`}>{s.icon}</div>
+                                <motion.div key={s.label} variants={scaleIn} className="stat-card">
+                                    <div className="stat-label" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: 8, color: 'var(--text-muted)' }}>{s.icon}</div>
                                     <div className="stat-label">{s.label}</div>
                                     <div className="stat-value" style={s.small ? { fontSize: '1.1rem' } : {}}>{s.value}</div>
                                 </motion.div>
@@ -275,16 +271,16 @@ export default function MoneyMapPage() {
                     {/* Stat ticker */}
                     {!loading && (
                         <motion.div variants={fadeUp} initial="hidden" animate="visible" className="map-stat-ticker" style={{ marginBottom: 20, borderRadius: 'var(--radius-md)' }}>
-                            <div className="map-stat-ticker-item"><strong>{stats.totalSales}</strong> units sold · mapped live</div>
-                            <div className="map-stat-ticker-item"><strong>₹{(stats.totalRevenue / Math.max(heatmapData.length, 1)).toFixed(0)}</strong> avg revenue/shop</div>
-                            <div className="map-stat-ticker-item"><strong>{heatmapData.length || 2}</strong> locations tracked</div>
+                            <div className="map-stat-ticker-item"><strong style={{ fontFamily: 'var(--font-mono)' }}>{stats.totalSales}</strong> units sold · mapped live</div>
+                            <div className="map-stat-ticker-item"><strong style={{ fontFamily: 'var(--font-mono)' }}>₹{(stats.totalRevenue / Math.max(heatmapData.length, 1)).toFixed(0)}</strong> avg revenue/shop</div>
+                            <div className="map-stat-ticker-item"><strong style={{ fontFamily: 'var(--font-mono)' }}>{heatmapData.length || 2}</strong> locations tracked</div>
                         </motion.div>
                     )}
 
                     {/* Map */}
-                    <motion.div variants={fadeUp} initial="hidden" animate="visible" className="card depth-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 'var(--radius-xl)' }}>
+                    <motion.div variants={fadeUp} initial="hidden" animate="visible" className="card" style={{ padding: 0, overflow: 'hidden', borderRadius: 'var(--radius-xl)' }}>
                         <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: 600 }}>📍 All Stores Sales Map</span>
+                            <span style={{ fontWeight: 500, fontFamily: 'var(--font-display)' }}>Sales Map</span>
                             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Bubble size tracks revenue (normalized)</span>
                         </div>
                         {/* Keep the map div always mounted so mapRef.current is valid when Leaflet inits */}
@@ -303,7 +299,7 @@ export default function MoneyMapPage() {
 
                     {/* Legend */}
                     <motion.div variants={fadeUp} initial="hidden" animate="visible" className="card" style={{ marginTop: 20 }}>
-                        <h3 style={{ fontSize: '1rem', marginBottom: 12 }}>💡 How to read this map</h3>
+                        <h3 style={{ fontSize: '1rem', marginBottom: 12, fontFamily: 'var(--font-display)', fontWeight: 500 }}>Legend</h3>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 14, flexWrap: 'wrap' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <span style={{ width: 12, height: 12, borderRadius: '50%', background: 'radial-gradient(circle at 30% 30%, #8af0ad, #35b861)' }} />
@@ -319,11 +315,11 @@ export default function MoneyMapPage() {
                             </div>
                             <div style={{ flex: 1, minWidth: 140, height: 8, borderRadius: 999, background: 'linear-gradient(90deg, #46c870 0%, #86d64f 40%, #ff8f3f 75%, #ff6b3d 100%)', opacity: 0.9 }} />
                         </div>
-                        <ul style={{ display: 'flex', flexDirection: 'column', gap: 8, color: 'var(--text-secondary)', fontSize: '0.875rem', listStyle: 'none' }}>
-                            <li>🔵 <strong>Bubble size</strong> — larger bubbles = more revenue generated from that neighbourhood</li>
-                            <li>🟢 <strong>Green bubbles</strong> — lower revenue areas (good opportunity to open new shops)</li>
-                            <li>🟠 <strong>Orange/Red bubbles</strong> — high spending zones (saturated but high demand)</li>
-                            <li>🖱 <strong>Click a bubble</strong> — to see shop name, total units sold, and revenue</li>
+                        <ul style={{ display: 'flex', flexDirection: 'column', gap: 8, color: 'var(--text-secondary)', fontSize: '0.875rem', listStyle: 'none', paddingLeft: 0 }}>
+                            <li><strong style={{ fontFamily: 'var(--font-mono)' }}>Bubble size</strong> — larger bubbles = more revenue generated from that neighbourhood</li>
+                            <li><strong style={{ fontFamily: 'var(--font-mono)' }}>Green bubbles</strong> — lower revenue areas (good opportunity to open new shops)</li>
+                            <li><strong style={{ fontFamily: 'var(--font-mono)' }}>Orange/Red bubbles</strong> — high spending zones (saturated but high demand)</li>
+                            <li><strong style={{ fontFamily: 'var(--font-mono)' }}>Click a bubble</strong> — to see shop name, total units sold, and revenue</li>
                         </ul>
                     </motion.div>
                 </div>
@@ -331,15 +327,15 @@ export default function MoneyMapPage() {
                 <style>{`
                     .money-map-popup .leaflet-popup-content-wrapper {
                         border-radius: 14px;
-                        background: rgba(9, 18, 24, 0.96);
-                        color: #eaf7ef;
+                        background: var(--bg-card, rgba(9, 18, 24, 0.96));
+                        color: var(--foreground, #eaf7ef);
                         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
-                        border: 1px solid rgba(96, 214, 140, 0.35);
+                        border: 1px solid var(--border);
                         animation: popupIn 180ms ease-out;
                     }
                     .money-map-popup .leaflet-popup-tip {
-                        background: rgba(9, 18, 24, 0.96);
-                        border: 1px solid rgba(96, 214, 140, 0.35);
+                        background: var(--bg-card, rgba(9, 18, 24, 0.96));
+                        border: 1px solid var(--border);
                     }
                     .money-map-popup .leaflet-popup-content {
                         margin: 10px 12px;
@@ -354,15 +350,23 @@ export default function MoneyMapPage() {
                     }
                     .sales-popup-title {
                         font-size: 13.5px;
-                        font-weight: 700;
+                        font-weight: 500;
                         margin-bottom: 3px;
-                        color: #bff9d2;
+                        color: var(--foreground, #bff9d2);
+                        font-family: var(--font-display);
                     }
                     .sales-popup-row {
-                        display: grid;
-                        grid-template-columns: 16px 1fr;
-                        gap: 6px;
+                        display: flex;
+                        gap: 8px;
                         align-items: center;
+                    }
+                    .popup-label {
+                        color: var(--text-muted);
+                        font-family: var(--font-mono);
+                        font-size: 11px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        min-width: 65px;
                     }
                     @keyframes popupIn {
                         from { opacity: 0; transform: translateY(6px) scale(0.96); }

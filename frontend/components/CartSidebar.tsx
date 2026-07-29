@@ -123,7 +123,7 @@ export default function CartSidebar() {
                 clearCart();
                 setPaying(false);
                 setStep('success');
-                toast('Order placed successfully! 🎉 Pay on delivery.', 'success');
+                toast('Order placed successfully! Pay on delivery.', 'success');
                 return;
             }
 
@@ -148,7 +148,7 @@ export default function CartSidebar() {
                 clearCart();
                 setPaying(false);
                 setStep('success');
-                toast('Order placed successfully! 🎉', 'success');
+                toast('Order placed successfully!', 'success');
                 return;
             }
 
@@ -175,7 +175,7 @@ export default function CartSidebar() {
                 clearCart();
                 setPaying(false);
                 setStep('success');
-                toast('Payment successful! Order placed! 🎉💳', 'success');
+                toast('Payment successful! Order placed!', 'success');
             } else {
                 toast(`Payment status: ${paymentIntent?.status}. Please try again.`, 'error');
                 setPaying(false);
@@ -213,21 +213,21 @@ export default function CartSidebar() {
         <>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Subtotal</span>
-                <span style={{ fontWeight: 600, fontSize: '0.92rem' }}>₹{displaySubtotals.subtotal.toFixed(2)}</span>
+                <span style={{ fontWeight: 600, fontSize: '0.92rem', fontFamily: 'var(--font-mono)' }}>₹{displaySubtotals.subtotal.toFixed(2)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Platform Fee</span>
-                <span style={{ fontWeight: 600, fontSize: '0.92rem' }}>₹{displaySubtotals.platformFee.toFixed(2)}</span>
+                <span style={{ fontWeight: 600, fontSize: '0.92rem', fontFamily: 'var(--font-mono)' }}>₹{displaySubtotals.platformFee.toFixed(2)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Delivery</span>
-                <span style={{ fontWeight: 600, fontSize: '0.92rem', color: displaySubtotals.deliveryFee === 0 ? 'var(--accent)' : 'inherit' }}>
-                    {displaySubtotals.deliveryFee === 0 ? '🎉 FREE' : `₹${displaySubtotals.deliveryFee.toFixed(2)}`}
+                <span style={{ fontWeight: 600, fontSize: '0.92rem', color: displaySubtotals.deliveryFee === 0 ? 'var(--accent)' : 'inherit', fontFamily: displaySubtotals.deliveryFee !== 0 ? 'var(--font-mono)' : 'inherit' }}>
+                    {displaySubtotals.deliveryFee === 0 ? 'Free' : `₹${displaySubtotals.deliveryFee.toFixed(2)}`}
                 </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', marginBottom: '20px', borderTop: '1px dashed var(--border)', borderBottom: '1px dashed var(--border)' }}>
                 <span style={{ fontWeight: 700, fontSize: '1rem' }}>To Pay</span>
-                <span style={{ fontWeight: 800, fontSize: '1.3rem', color: 'var(--accent)' }}>₹{displaySubtotals.grandTotal.toFixed(2)}</span>
+                <span style={{ fontWeight: 800, fontSize: '1.3rem', color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{displaySubtotals.grandTotal.toFixed(2)}</span>
             </div>
             <button className="btn btn-primary w-full btn-lg" onClick={goToCheckout} style={{ boxShadow: '0 4px 16px rgba(var(--accent-rgb), 0.35)', fontSize: '0.95rem', letterSpacing: '0.2px' }}>
                 Proceed to Checkout →
@@ -242,14 +242,14 @@ export default function CartSidebar() {
                 <div className="cart-sidebar-container">
                     <div className="cart-header">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <h3>
-                                {step === 'cart' ? '🛒 My Cart' : step === 'payment' ? '💳 Payment' : step === 'processing' ? '⏳ Processing' : '✅ Order Placed'}
-                                {step === 'cart' && <span className="badge badge-green" style={{ fontSize: '0.75rem', marginLeft: 6 }}>{cart.length} items</span>}
+                            <h3 style={{ display: 'flex', alignItems: 'center' }}>
+                                {step === 'cart' ? 'Cart' : step === 'payment' ? 'Payment' : step === 'processing' ? 'Processing' : 'Order Placed'}
+                                {step === 'cart' && <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginLeft: 8, fontWeight: 400 }}>· {cart.length} items</span>}
                             </h3>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <button className="btn btn-ghost btn-sm" onClick={() => setIsMaximized(!isMaximized)} title={isMaximized ? 'Restore Size' : 'Maximize Cart'}>
-                                {isMaximized ? '🗗' : '🗖'}
+                                {isMaximized ? '▪' : '▫'}
                             </button>
                             <button className="btn btn-ghost btn-sm" onClick={resetAndClose} title="Close Cart">✕</button>
                         </div>
@@ -268,8 +268,8 @@ export default function CartSidebar() {
                                                 border: `2px solid ${i <= stepIdx ? 'var(--accent)' : 'var(--border)'}`,
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 fontSize: '0.62rem', fontWeight: 800,
-                                                color: i <= stepIdx ? '#000' : 'var(--text-muted)',
-                                                boxShadow: i === stepIdx ? '0 0 8px rgba(var(--accent-rgb), 0.5)' : 'none',
+                                                color: i <= stepIdx ? '#F5F0E8' : 'var(--text-muted)',
+                                                boxShadow: 'none',
                                                 flexShrink: 0, transition: 'all 0.3s',
                                             }}>
                                                 {i < stepIdx ? '✓' : i + 1}
@@ -310,9 +310,8 @@ export default function CartSidebar() {
                         >
                             {cart.length === 0 ? (
                                 <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--text-muted)' }}>
-                                    <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🛒</div>
-                                    <p>Your cart is empty</p>
-                                    <p style={{ fontSize: '0.8rem', marginTop: '6px' }}>Start adding items from the shop!</p>
+                                    <p style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>No items yet</p>
+                                    <p style={{ fontSize: '0.8rem' }}>Start adding items from the shop.</p>
                                 </div>
                             ) : analyzing && !cartAnalysis ? (
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0' }}>
@@ -334,7 +333,7 @@ export default function CartSidebar() {
                                     {cartAnalysis.unavailableItems?.length > 0 && (
                                         <div style={{ background: 'var(--bg-card)', border: '1px solid var(--danger)', borderRadius: '16px', padding: '24px', marginBottom: '32px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                                             <div style={{ color: 'var(--danger)', fontWeight: 700, fontSize: '0.9rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <span>⚠️</span> Some items are currently unavailable
+                                                <span>Warning:</span> Some items are currently unavailable
                                             </div>
                                             {cartAnalysis.unavailableItems.map((ui: any) => (
                                                 <div key={ui.productId} style={{ marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '16px' }}>
@@ -377,11 +376,11 @@ export default function CartSidebar() {
                                             {/* Store header */}
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '14px', borderBottom: '1px solid var(--border)' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'var(--accent-subtle)', border: '1px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>🏪</div>
+                                                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', fontWeight: 600, fontFamily: 'var(--font-display)', flexShrink: 0 }}>{(group.shopName || 'L').charAt(0)}</div>
                                                     <div>
                                                         <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{group.shopName || 'Local Shop'}</div>
                                                         <div style={{ fontSize: '0.73rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                                                            ⏱ Delivery in ~{group.deliveryEstimateMins} mins
+                                                            Delivery in ~{group.deliveryEstimateMins} mins
                                                         </div>
                                                     </div>
                                                 </div>
@@ -397,13 +396,13 @@ export default function CartSidebar() {
                                                         <div style={{ width: 60, height: 60, borderRadius: '12px', background: 'var(--bg-elevated)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                                                             {item.image
                                                                 ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                                : <span style={{ fontSize: '1.4rem' }}>📦</span>
+                                                                : <span style={{ fontSize: '1.4rem', fontFamily: 'var(--font-display)', color: 'var(--text-muted)' }}>{item.name.charAt(0)}</span>
                                                             }
                                                         </div>
                                                         <div style={{ flex: 1, minWidth: 0 }}>
                                                             <div style={{ fontSize: '0.9rem', fontWeight: 600, lineHeight: 1.3, marginBottom: '4px' }}>{item.name}</div>
-                                                            <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--accent)' }}>₹{(item.price * item.quantity).toFixed(2)}</div>
-                                                            <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>₹{item.price} ea</div>
+                                                            <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{(item.price * item.quantity).toFixed(2)}</div>
+                                                            <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>₹{item.price} ea</div>
                                                             <div className="qty-control" style={{ marginTop: '10px' }}>
                                                                 <button className="qty-btn" onClick={() => updateQty(item.productId, -1)}>−</button>
                                                                 <span style={{ fontSize: '0.875rem', fontWeight: 700, minWidth: '28px', textAlign: 'center' }}>{item.quantity}</span>
@@ -426,7 +425,7 @@ export default function CartSidebar() {
                                                     <div key={cs._id} style={{ minWidth: '116px', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '12px', padding: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', flexShrink: 0 }}>
                                                         <img src={cs.image || '/placeholder.png'} style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, marginBottom: '8px' }} />
                                                         <div style={{ fontSize: '0.73rem', fontWeight: 500, lineHeight: 1.25, marginBottom: '6px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', width: '100%' }}>{cs.name}</div>
-                                                        <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--accent)', marginBottom: '8px' }}>₹{cs.price}</div>
+                                                        <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--accent)', marginBottom: '8px', fontFamily: 'var(--font-mono)' }}>₹{cs.price}</div>
                                                         <button className="btn btn-secondary btn-sm" style={{ width: '100%', fontSize: '0.73rem', padding: '4px 6px' }}
                                                             onClick={() => addToCart({ productId: cs._id, name: cs.name, price: cs.price, quantity: 1, image: cs.image, shopId: '' })}>
                                                             + Add
@@ -457,7 +456,7 @@ export default function CartSidebar() {
                                     boxShadow: '0 4px 20px rgba(0,0,0,0.07)',
                                 }}>
                                     <div style={{ fontWeight: 700, fontSize: '0.98rem', marginBottom: '20px', paddingBottom: '14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        💳 Order Summary
+                                        Order Summary
                                     </div>
                                     {paymentRows}
                                 </div>
@@ -474,8 +473,8 @@ export default function CartSidebar() {
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {[
-                                { id: 'card' as const, name: 'Credit / Debit Card', icon: '💳', badge: 'Powered by Stripe' },
-                                { id: 'cod' as const, name: 'Cash on Delivery', icon: '💵', badge: null },
+                                { id: 'card' as const, name: 'Credit / Debit Card', icon: 'Card', badge: 'Powered by Stripe' },
+                                { id: 'cod' as const, name: 'Cash on Delivery', icon: 'COD', badge: null },
                             ].map(m => (
                                 <button key={m.id} className={`card ${paymentMethod === m.id ? 'active' : ''}`}
                                     onClick={() => setPaymentMethod(m.id)}
@@ -486,12 +485,12 @@ export default function CartSidebar() {
                                         cursor: 'pointer', textAlign: 'left',
                                         transition: 'all 0.2s ease'
                                     }}>
-                                    <div style={{ fontSize: '1.5rem' }}>{m.icon}</div>
+                                    <div style={{ fontSize: '0.85rem', fontWeight: 600, padding: '4px 8px', background: 'var(--bg-secondary)', borderRadius: '4px', border: '1px solid var(--border)' }}>{m.icon}</div>
                                     <div style={{ flex: 1 }}>
                                         <div style={{ fontWeight: 600, color: paymentMethod === m.id ? 'var(--accent)' : 'var(--text-primary)' }}>{m.name}</div>
                                         {m.badge && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 2 }}>{m.badge}</div>}
                                     </div>
-                                    {paymentMethod === m.id && <div style={{ color: 'var(--accent)' }}>✅</div>}
+                                    {paymentMethod === m.id && <div style={{ color: 'var(--accent)', fontWeight: 'bold' }}>✓</div>}
                                 </button>
                             ))}
                         </div>
@@ -519,7 +518,7 @@ export default function CartSidebar() {
                                 />
                                 {cardError && (
                                     <p style={{ color: 'var(--danger)', fontSize: '0.8rem', marginTop: '8px', fontWeight: 500 }}>
-                                        ⚠️ {cardError}
+                                        Error: {cardError}
                                     </p>
                                 )}
                                 {!cardReady && stripe && (
@@ -529,29 +528,28 @@ export default function CartSidebar() {
                                     </div>
                                 )}
                                 <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '10px' }}>
-                                    🔒 Test mode — use <strong>4242 4242 4242 4242</strong>, any future date, any CVC
+                                    Test mode — use <strong>4242 4242 4242 4242</strong>, any future date, any CVC
                                 </p>
                             </div>
                         )}
 
-                        {/* Order Summary */}
                         <div style={{
                             padding: '16px 0', borderTop: '1px dashed var(--border)', borderBottom: '1px dashed var(--border)',
                             display: 'flex', flexDirection: 'column', gap: '8px'
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                                 <span className="text-muted">Subtotal ({cart.length} items)</span>
-                                <span style={{ fontWeight: 600 }}>₹{displaySubtotals.subtotal.toFixed(2)}</span>
+                                <span style={{ fontWeight: 600, fontFamily: 'var(--font-mono)' }}>₹{displaySubtotals.subtotal.toFixed(2)}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                                 <span className="text-muted">Delivery</span>
-                                <span style={{ fontWeight: 600, color: displaySubtotals.deliveryFee === 0 ? 'var(--accent)' : 'inherit' }}>
+                                <span style={{ fontWeight: 600, color: displaySubtotals.deliveryFee === 0 ? 'var(--accent)' : 'inherit', fontFamily: displaySubtotals.deliveryFee !== 0 ? 'var(--font-mono)' : 'inherit' }}>
                                     {displaySubtotals.deliveryFee === 0 ? 'FREE' : `₹${displaySubtotals.deliveryFee.toFixed(2)}`}
                                 </span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', borderTop: '1px solid var(--border)' }}>
                                 <span style={{ fontWeight: 700 }}>Total To Pay</span>
-                                <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--accent)' }}>₹{displaySubtotals.grandTotal.toFixed(2)}</span>
+                                <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>₹{displaySubtotals.grandTotal.toFixed(2)}</span>
                             </div>
                         </div>
 
@@ -565,7 +563,7 @@ export default function CartSidebar() {
                             >
                                 {paying
                                     ? <><span className="spinner" style={{ width: 16, height: 16 }} /> Processing...</>
-                                    : paymentMethod === 'cod' ? '🛵 Place Order (COD)' : `💳 Pay ₹${displaySubtotals.grandTotal.toFixed(2)}`
+                                    : paymentMethod === 'cod' ? 'Place Order (COD)' : `Pay ₹${displaySubtotals.grandTotal.toFixed(2)}`
                                 }
                             </button>
                         </div>
@@ -583,7 +581,7 @@ export default function CartSidebar() {
                             marginTop: '32px', padding: '12px 24px', background: 'var(--accent-subtle)',
                             borderRadius: 'var(--radius-full)', color: 'var(--accent)', fontSize: '0.8rem', fontWeight: 600
                         }}>
-                            {paymentMethod === 'cod' ? '📋 Verifying details...' : '🏦 Connecting to Stripe...'}
+                            {paymentMethod === 'cod' ? 'Verifying details...' : 'Connecting to Stripe...'}
                         </div>
                     </div>
                 )}
@@ -591,11 +589,11 @@ export default function CartSidebar() {
                 {step === 'success' && (
                     <div className="cart-items" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, padding: '40px 0', textAlign: 'center' }}>
                         <div style={{
-                            width: 80, height: 80, borderRadius: '50%', background: 'var(--accent-subtle)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem',
-                            marginBottom: '24px', animation: 'pulse 1.5s infinite'
+                            width: 80, height: 80, borderRadius: '50%', background: 'var(--bg-elevated)', border: '2px solid var(--accent)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', color: 'var(--accent)',
+                            marginBottom: '24px'
                         }}>
-                            ✅
+                            ✓
                         </div>
                         <h3 style={{ marginBottom: '8px', fontSize: '1.25rem' }}>Order Confirmed!</h3>
                         <p className="text-muted" style={{ fontSize: '0.875rem', maxWidth: '280px', lineHeight: 1.5 }}>
@@ -608,13 +606,13 @@ export default function CartSidebar() {
                                 padding: '8px 16px', background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)',
                                 border: '1px solid var(--border)', fontSize: '0.8rem'
                             }}>
-                                {paymentMethod === 'cod' ? '💵 Cash on Delivery' : '💳 Paid via Stripe'}
+                                {paymentMethod === 'cod' ? 'Cash on Delivery' : 'Paid via Stripe'}
                             </div>
                             <div style={{
                                 padding: '8px 16px', background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)',
                                 border: '1px solid var(--border)', fontSize: '0.8rem'
                             }}>
-                                📍 {user?.location?.address?.slice(0, 30)}{user?.location?.address && user.location.address.length > 30 ? '...' : ''}
+                                Address: {user?.location?.address?.slice(0, 30)}{user?.location?.address && user.location.address.length > 30 ? '...' : ''}
                             </div>
                         </div>
                         <button className="btn btn-primary" style={{ marginTop: '32px' }} onClick={resetAndClose}>
