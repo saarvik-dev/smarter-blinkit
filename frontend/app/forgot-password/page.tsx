@@ -41,18 +41,18 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', background: 'radial-gradient(ellipse at 50% 0%, rgba(0,210,106,0.08) 0%, transparent 60%)' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', background: 'radial-gradient(ellipse at 50% 0%, rgba(31,61,43,0.05) 0%, transparent 60%)' }}>
             <div style={{ width: '100%', maxWidth: '420px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '36px' }}>
                     <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
                         <div className="navbar-logo-icon" style={{ width: 48, height: 48, fontSize: 22 }}>⚡</div>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 800 }}>Smarter<span className="text-accent">Blinkit</span></span>
+                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700 }}>Smarter<span className="text-accent">Blinkit</span></span>
                     </Link>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>Reset Password</h1>
+                    <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>Reset Password</h1>
                     <p className="text-muted" style={{ fontSize: '0.9rem' }}>{step === 1 ? 'Enter your email to receive reset steps' : 'Now enter your new password'}</p>
                 </div>
 
-                <div className="card" style={{ padding: '32px' }}>
+                <div className="card" style={{ padding: '32px', boxShadow: 'var(--shadow-lg)' }}>
                     {step === 1 ? (
                         <form onSubmit={handleRequest} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                             <div className="form-group">

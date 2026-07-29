@@ -67,10 +67,10 @@ export default function RegisterPage() {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', position: 'relative', overflow: 'hidden' }}>
             {/* Background */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,210,106,0.1) 0%, transparent 65%)' }} />
-            <div className="blob blob-green" style={{ width: 500, height: 500, top: '-20%', right: '-10%', opacity: 0.35 }} />
-            <div className="blob blob-blue" style={{ width: 350, height: 350, bottom: '-10%', left: '-8%', opacity: 0.25 }} />
-            <div style={{ position: 'absolute', inset: 0, backgroundImage: `linear-gradient(rgba(0,210,106,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,210,106,0.025) 1px, transparent 1px)`, backgroundSize: '50px 50px', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(31,61,43,0.06) 0%, transparent 65%)' }} />
+            <div className="blob blob-green" style={{ width: 500, height: 500, top: '-20%', right: '-10%', opacity: 0.08 }} />
+            <div className="blob blob-blue" style={{ width: 350, height: 350, bottom: '-10%', left: '-8%', opacity: 0.05 }} />
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: `linear-gradient(rgba(31,61,43,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(31,61,43,0.02) 1px, transparent 1px)`, backgroundSize: '50px 50px', pointerEvents: 'none' }} />
 
             <motion.div variants={staggerContainer} initial="hidden" animate="visible"
                 style={{ width: '100%', maxWidth: step === 2 ? '800px' : '480px', transition: 'max-width 0.35s ease', position: 'relative', zIndex: 1 }}>
@@ -79,13 +79,13 @@ export default function RegisterPage() {
                 <motion.div variants={fadeUp} style={{ textAlign: 'center', marginBottom: '28px' }}>
                     <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '20px', textDecoration: 'none' }}>
                         <div className="navbar-logo-icon" style={{ width: 48, height: 48, fontSize: 22 }}>⚡</div>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>Smarter<span className="text-accent">Blinkit</span></span>
+                        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>Smarter<span className="text-accent">Blinkit</span></span>
                     </Link>
                     <AnimatePresence mode="wait">
                         <motion.div key={step}
                             initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
                             transition={{ duration: 0.3 }}>
-                            <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>
+                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>
                                 {step === 1 ? 'Create Account' : step === 2 ? 'Set Delivery Location' : 'Setup Face ID'}
                             </h1>
                             <p className="text-muted" style={{ fontSize: '0.9rem' }}>
@@ -100,12 +100,12 @@ export default function RegisterPage() {
                     {[1, 2, 3].map((s, i) => (
                         <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <motion.div
-                                animate={{ scale: step === s ? 1.1 : 1, background: step > s ? '#00d26a' : step === s ? 'var(--accent)' : 'var(--border)' }}
+                                animate={{ scale: step === s ? 1.1 : 1, background: step > s ? 'var(--accent)' : step === s ? 'var(--accent)' : 'var(--bg-elevated)' }}
                                 transition={{ duration: 0.3 }}
-                                style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, color: step >= s ? '#000' : 'var(--text-muted)', boxShadow: step === s ? '0 0 12px rgba(0,210,106,0.5)' : 'none' }}>
+                                style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: step >= s ? '#F5F0E8' : 'var(--text-muted)', border: step < s ? '1px solid var(--border)' : 'none' }}>
                                 {step > s ? '✓' : s}
                             </motion.div>
-                            {i < 2 && <motion.div animate={{ background: step > s ? 'var(--accent)' : 'var(--border)' }} transition={{ duration: 0.3 }} style={{ width: 52, height: 2 }} />}
+                            {i < 2 && <motion.div animate={{ background: step > s ? 'var(--accent)' : 'var(--border)' }} transition={{ duration: 0.3 }} style={{ width: 52, height: 2, borderRadius: 2 }} />}
                         </div>
                     ))}
                 </motion.div>
@@ -117,8 +117,8 @@ export default function RegisterPage() {
                             style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
                             {[{ v: 'buyer', icon: '🛒', label: 'Buyer', sub: 'Shop & explore' }, { v: 'seller', icon: '🏪', label: 'Seller', sub: 'Sell products' }].map(r => (
                                 <motion.button key={r.v} onClick={() => setForm((f: any) => ({ ...f, role: r.v }))} type="button"
-                                    whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                                    style={{ flex: 1, padding: '16px', borderRadius: 'var(--radius-lg)', border: `2px solid ${form.role === r.v ? 'var(--accent)' : 'var(--border)'}`, background: form.role === r.v ? 'var(--accent-subtle)' : 'var(--bg-card)', cursor: 'pointer', transition: 'border-color 0.2s, background 0.2s', textAlign: 'center', boxShadow: form.role === r.v ? '0 0 16px rgba(0,210,106,0.2)' : 'none' }}>
+                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                                    style={{ flex: 1, padding: '16px', borderRadius: 'var(--radius-lg)', border: `2px solid ${form.role === r.v ? 'var(--accent)' : 'var(--border)'}`, background: form.role === r.v ? 'var(--accent-subtle)' : 'var(--bg-card)', cursor: 'pointer', transition: 'border-color 0.2s, background 0.2s', textAlign: 'center' }}>
                                     <div style={{ fontSize: '1.8rem', marginBottom: '6px' }}>{r.icon}</div>
                                     <div style={{ fontWeight: 700, color: form.role === r.v ? 'var(--accent)' : 'var(--text-primary)' }}>{r.label}</div>
                                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{r.sub}</div>
@@ -132,37 +132,37 @@ export default function RegisterPage() {
                     <motion.div key={step}
                         initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
                         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        className="glass-panel"
-                        style={{ padding: step === 2 ? '2px' : '32px', overflow: 'hidden' }}>
+                        className="card"
+                        style={{ padding: step === 2 ? '2px' : '32px', overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
 
                         {step === 1 && (
                             <form onSubmit={handleStep1Submit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                                     <div className="form-group">
                                         <label className="form-label">Full Name</label>
-                                        <input className="form-input glass-input" placeholder="John Doe" value={form.name} onChange={set('name')} required />
+                                        <input className="form-input" placeholder="John Doe" value={form.name} onChange={set('name')} required />
                                     </div>
                                     <div className="form-group">
                                         <label className="form-label">Phone</label>
-                                        <input className="form-input glass-input" placeholder="+91 98765..." value={form.phone} onChange={set('phone')} required />
+                                        <input className="form-input" placeholder="+91 98765..." value={form.phone} onChange={set('phone')} required />
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">Email</label>
-                                    <input className="form-input glass-input" type="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
+                                    <input className="form-input" type="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">Password</label>
-                                    <input className="form-input glass-input" type="password" placeholder="Min 6 characters" value={form.password} onChange={set('password')} required minLength={6} />
+                                    <input className="form-input" type="password" placeholder="Min 6 characters" value={form.password} onChange={set('password')} required minLength={6} />
                                 </div>
                                 {form.role === 'seller' && (
                                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="form-group">
                                         <label className="form-label">Shop/Business Name</label>
-                                        <input className="form-input glass-input" placeholder="My Awesome Store" value={form.shopName} onChange={set('shopName')} required />
+                                        <input className="form-input" placeholder="My Awesome Store" value={form.shopName} onChange={set('shopName')} required />
                                     </motion.div>
                                 )}
                                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ marginTop: '12px' }}>
-                                    <button type="submit" className="btn btn-primary btn-lg w-full btn-glow">
+                                    <button type="submit" className="btn btn-primary btn-lg w-full">
                                         Continue to Location 📍
                                     </button>
                                 </motion.div>

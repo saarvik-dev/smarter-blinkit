@@ -82,7 +82,7 @@ export default function FaceRegister({ userRole, onSkip }: { userRole: string, o
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <h3 style={{ marginBottom: '8px', fontWeight: 700 }}>🪪 Register Face ID</h3>
+            <h3 style={{ marginBottom: '8px', fontWeight: 700, fontFamily: 'var(--font-display)' }}>🪪 Register Face ID</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '20px' }}>{message}</p>
 
             <div style={{ position: 'relative', width: 280, height: 210, margin: '0 auto 20px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: `2px solid ${status === 'done' ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-elevated)' }}>
@@ -93,7 +93,7 @@ export default function FaceRegister({ userRole, onSkip }: { userRole: string, o
                     </div>
                 )}
                 {status === 'done' && (
-                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,210,106,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>✅</div>
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(31,61,43,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>✅</div>
                 )}
             </div>
 
@@ -107,7 +107,7 @@ export default function FaceRegister({ userRole, onSkip }: { userRole: string, o
                 )}
             </div>
 
-            <p style={{ marginTop: '16px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <p style={{ marginTop: '16px', fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.2px' }}>
                 Your face data is stored securely as a mathematical hash and never leaves the system.
             </p>
         </div>
