@@ -37,23 +37,7 @@ The project is now deployed and accessible online.
 
 ---
 
-## 📸 Screenshots
 
-| Shop — Product Grid | Text Search ("pizza") |
-|---|---|
-| ![Shop Grid](docs/screenshots/shop_grid.png) | ![Pizza Search](docs/screenshots/text_search.png) |
-
-| 🧠 AI Intent Search ("I have a cold") | Product Detail + Neo4j Suggestions |
-|---|---|
-| ![AI Intent](docs/screenshots/ai_intent.png) | ![Product Detail](docs/screenshots/product_detail.png) |
-
-| 🤖 AI Recipe Agent | 📡 Live Storeboard |
-|---|---|
-| ![AI Agent](docs/screenshots/ai_agent.png) | ![Storeboard](docs/screenshots/storeboard.png) |
-
-| 🗺️ Money Map (Leaflet.js) | Buyer Dashboard |
-|---|---|
-| ![alt text](image.png) | ![Dashboard](docs/screenshots/dashboard.png) |
 
 ---
 
@@ -69,7 +53,7 @@ Smarter BlinkIt is a full-stack web application built around the concept of an *
 | **Backend** | Node.js + Express REST API |
 | **Primary DB** | MongoDB Atlas (users, products, orders, shops, fallback vector models) |
 | **Graph DB** | Neo4j AuraDB (product relationships: SIMILAR_TO, BOUGHT_WITH, vector index) |
-| **Primary NLP (AI)** | Google Gemini `gemini-2.5-flash` (recipe agent) & `gemini-2.0-flash` (intent parsing) |
+| **Primary NLP (AI)** | Google Gemini `gemini-3.1-flash-lite` (with `gemini-3.0-flash` fallback cluster) |
 | **Primary Vector AI** | Google Gemini `gemini-embedding-001` (3072-dimensional) |
 | **Fallback NLP (AI)** | Hugging Face Inference API `Qwen/Qwen2.5-72B-Instruct` |
 | **Fallback Math Engine**| Node.js custom `Cosine Similarity` vector calculation algorithm |
@@ -85,7 +69,7 @@ Smarter BlinkIt is a full-stack web application built around the concept of an *
 
 We leverage a suite of modern APIs to power the "Smarter" features:
 
-1.  **Google Gemini AI (`gemini-2.0-flash`)**: Orchestrates the Recipe Agent, Intent Search, and Natural Language processing.
+1.  **Google Gemini AI (`gemini-3.1-flash-lite` / `gemini-3.0-flash`)**: Orchestrates the Recipe Agent, Intent Search, and Natural Language processing.
 2.  **Google Gemini Embeddings (`gemini-embedding-001`)**: Generates 3072-dimensional vector representations for high-precision semantic product pairing.
 3.  **Nominatim (OpenStreetMap)**: Provides forward and reverse geocoding for detecting user locations and converting typed addresses to coordinates.
 4.  **OSRM (Open Source Routing Machine)**: Solves the Vehicle Routing Problem (VRP) to calculate optimized multi-stop delivery routes between shops and the buyer.
@@ -104,11 +88,11 @@ We leverage a suite of modern APIs to power the "Smarter" features:
 - **Dual Login**: Buyers and Sellers see completely different dashboards after login.
 - **Role-based Routing**: Seamless redirection post-login preventing back-button loops.
 - **Face ID Login**: Register your face once, then log in just by looking at the camera (face-api.js), now integrated directly into the signup flow.
-- **Theme Consistency**: Fully reactive Light/Dark CSS Variable Theme architecture across the app.
+- **Theme Consistency**: Fully reactive theme architecture using the premium **Market Ledger** styling system (warm cream theme `#F7F3EA` / forest-dark theme `#14231C` with editorial Fraunces display typography, Inter body typography, and monospace IBM Plex Mono totals).
 - **Progressive Smart Search**: Google-like live search — results update as you type. Typing `V` instantly returns Vicks, Vitamins, Vegetables etc. No need to type the full keyword.
 
 ### Stage 2 — The Automator ✅
-- **AI Recipe Agent**: Type "Make pizza for 4 people" → Gemini extracts ingredients → matches nearest shop products → one-click cart fill.
+- **Meal Planner (AI Recipe Agent)**: Type "Make pizza for 4 people" → Gemini extracts ingredients → matches nearest shop products → one-click cart fill.
 - **Neo4j Graph Suggestions**: Products stored as graph nodes. When you buy pasta, the system records `BOUGHT_WITH` cheese → next user sees suggestion.
 - **Intent-Aware Search**: Search "I have a cold" → AI returns Honey, Ginger Tea, Vitamin C.
 - **AI Redundancy**: Complete fallback protocols for both Intent and Recipe agents, bypassing Gemini rate limit errors invisibly.
@@ -118,7 +102,7 @@ We leverage a suite of modern APIs to power the "Smarter" features:
 - **Location Auto-Detect**: Integrates Nominatim Reverse Geocoding enabling auto-detecting user checkout delivery address.
 - **Live Storeboard**: Real-time Socket.io dashboard showing top-selling products and top-rated shops.
 - **Smart Cart Splitting**: Multi-shop orders auto-split per shop.
-- **Product Detail Page**: Full product info with quantity selector and Neo4j-powered Smart Suggestions.
+- **Product Detail Page**: Full product info with quantity selector and Neo4j-powered **Related Picks**.
 - **Live Dynamic Filters**: Categories and Shops are fetched live from the database. Any new shop or category added by a seller is instantly reflected for all buyers.
 - **Smart Shop Filter**: Selecting a specific shop overrides the "Nearby Only" proximity constraint, showing all products from that shop regardless of distance.
 - **Smart Category Combobox**: Seller's category input features a searchable dropdown with live filtering and inline "+ Add new category" option.
@@ -138,7 +122,7 @@ We leverage a suite of modern APIs to power the "Smarter" features:
 
 ### Stage 6 — Smart Logistics Preview ✅
 - **Smart Delivery Route Visualization**: The cart sidebar now acts as a full logistics preview. When items span multiple shops it shows: optimized pickup order (nearest-neighbour algorithm), a horizontal flow bar (`Store A → Store B → Your Home`), per-stop summaries with item counts and ETA, and an interactive dark-themed Leaflet map with color-coded polylines (green = store-to-store, blue = last-mile delivery).
-- **Multi-Model AI Fallback Router**: All Gemini text-generation calls go through `aiRouter.js` which automatically cycles through a configurable priority list (`gemini-2.5-flash → gemini-2.0-flash → gemini-2.0-flash-lite → gemini-1.5-flash`) on rate-limit / quota errors. The last successful model is cached to reduce fallback switches. Every AI response includes a `modelUsed` field shown subtly in the UI.
+- **Multi-Model AI Fallback Router**: All Gemini text-generation calls go through `aiRouter.js` which automatically cycles through a configurable priority list (`gemini-3.1-flash-lite → gemini-3.0-flash → gemini-2.5-flash → gemini-2.5-flash-lite`) on rate-limit / quota errors. The last successful model is cached to reduce fallback switches. Every AI response includes a `modelUsed` field shown subtly in the UI.
 
 ### Stage 7 — Dynamic Ratings & Reviews ✅
 - **Mongo-only review engine**: Added a dedicated `Review` collection for user feedback (`productId`, `shopId`, `userId`, `rating`, `reviewText`, timestamps).
@@ -230,7 +214,7 @@ The Smarter-Blinkit platform utilizes a multi-layered AI architecture to guarant
 ### 1. AI Intent Search (The Smart Search Bar)
 *   **Goal:** Translates abstract user needs ("I have a cold", "movie night") into hyper-relevant product recommendations.
 *   **Step 1: Concept Expansion (NLP)**
-    *   **Primary:** Google Gemini (`gemini-2.0-flash`) expands the query into 5-6 grocery keywords (e.g., `["honey", "ginger tea", "cough syrup"]`).
+    *   **Primary:** Google Gemini (`gemini-3.1-flash-lite`) expands the query into 5-6 grocery keywords (e.g., `["honey", "ginger tea", "cough syrup"]`).
     *   **Fallback:** Hugging Face Inference API (`Qwen/Qwen2.5-72B-Instruct`) takes over instantly if Gemini is unreachable or rate-limited.
 *   **Step 2: Semantic Vector Match (Math)**
     *   **Primary:** Google Gemini (`gemini-embedding-001`) converts the query into a 3072-dimensional math vector. **Neo4j Graph Database** performs a lightning-fast nearest-neighbor Cosine Similarity search on its vector index to find conceptually related products.
@@ -238,10 +222,10 @@ The Smarter-Blinkit platform utilizes a multi-layered AI architecture to guarant
 *   **Step 3: Keyword Fallback (Fail-Safe)**
     *   If embedding generation fails entirely (e.g., both Gemini and Hugging Face are blocked by a firewall), the system skips vector math and defaults to executing a highly optimized MongoDB Regex search using the expanded keywords from Step 1.
 
-### 2. AI Recipe Agent
+### 2. AI Recipe Agent (Meal Planner)
 *   **Goal:** Converts recipe requests ("Make a pizza for 4 people") into a structured, ready-to-buy cart list.
 *   **Step 1: JSON Ingredient Extraction**
-    *   **Primary:** Google Gemini (`gemini-2.5-flash`) extracts ingredients, exact quantities, and optimized search parameters into a strict JSON array.
+    *   **Primary:** Google Gemini (`gemini-3.1-flash-lite` / `gemini-3.0-flash`) extracts ingredients, exact quantities, and optimized search parameters into a strict JSON array.
     *   **Fallback:** Hugging Face Inference API (`Qwen/Qwen2.5-72B-Instruct`) is invoked to extract the identical JSON structure if Gemini throws a 429 quota error.
 *   **Step 2: Exact Product Matching**
     *   Unlike Intent Search (which looks for *concepts*), the Recipe Agent requires *exact* ingredients. It runs a direct **MongoDB Keyword Search** to find specific items like "Flour" or "Salt".

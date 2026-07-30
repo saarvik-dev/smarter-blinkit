@@ -7,7 +7,7 @@
 ## System Overview
 
 ```
-Browser (Next.js 16 App Router)
+Browser (Next.js 14 App Router)
     │
     ├─ React Context (useApp)  ──────── Auth, Cart, API, Toasts
     │
@@ -63,10 +63,10 @@ Request → aiRouter.generateText(parts)
 ```
 
 **Model priority list** (configured in `backend/config/aiModels.js`):
-1. `gemini-2.5-flash` — Primary
-2. `gemini-2.0-flash` — First fallback
-3. `gemini-2.0-flash-lite` — Lighter fallback
-4. `gemini-1.5-flash` — Older stable
+1. `gemini-3.1-flash-lite` — Primary
+2. `gemini-3.0-flash` — First fallback
+3. `gemini-2.5-flash` — Lighter fallback
+4. `gemini-2.5-flash-lite` — Older stable
 
 **Recoverable error detection:**
 - HTTP 429 (Too Many Requests)

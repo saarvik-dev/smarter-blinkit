@@ -17,7 +17,7 @@
 - [x] 3-step registration wizard (info → map → face)
 
 ### Stage 2 — Automator ✅
-- [x] AI Recipe Agent (Gemini 2.5-flash → HuggingFace fallback)
+- [x] AI Recipe Agent (Gemini 3.1-flash-lite → HuggingFace fallback)
 - [x] Neo4j graph: BOUGHT_WITH relationships (recorded on order placement)
 - [x] Neo4j graph: SIMILAR_TO relationships (created on product add)
 - [x] Intent-aware search ("I have a cold" → honey, ginger tea, vitamin C)
@@ -43,7 +43,7 @@
 
 ### Stage 6 — Smart Logistics & Resilience ✅
 - [x] Smart Delivery Route Visualization (nearest-neighbour optimizer, Leaflet dark map, polylines, ETA, pickup summary)
-- [x] Multi-model AI fallback router (`aiRouter.js` — priority list: gemini-2.5-flash → gemini-2.0-flash → lite → 1.5-flash)
+- [x] Multi-model AI fallback router (`aiRouter.js` — priority list: gemini-3.1-flash-lite → gemini-3.0-flash → gemini-2.5-flash → gemini-2.5-flash-lite)
 - [x] Per-response `modelUsed` field + subtle frontend indicator on AI agent page and intent search
 - [x] AI model priority list centralized in `backend/config/aiModels.js`
 - [x] Shop coordinates surfaced in cart analysis response for frontend route visualization
@@ -88,16 +88,16 @@
 | 5 | Admin fallback secret hardcoded (`'smarter-dev-123'`) | 🟡 Security | `backend/routes/admin.js` |
 | 6 | `userReportService` loads all records into memory | 🟡 Scalability | `backend/services/userReportService.js` |
 | 7 | MoneyMap page loads Leaflet via script injection | 🟢 Cleanup | `frontend/app/money-map/page.tsx` |
-| 8 | Frontend UI/UX needs significant improvement (per README) | 🟡 UX | All frontend files |
+| 8 | Frontend UI/UX refined to Market Ledger theme | 🟢 Resolved | All frontend files |
 
 ---
 
 ## Potential Next Tasks
 
 - [ ] Fix `neo4jService.read()` missing function (Issue #1)
-- [ ] Improve frontend UI/UX — design, animations, responsiveness
+- [x] Improve frontend UI/UX — design, animations, responsiveness
 - [ ] Add order status updates for sellers (confirm, prepare, dispatch, deliver)
-- [ ] Add product reviews and ratings from buyers
+- [x] Add product reviews and ratings from buyers
 - [ ] Implement real email-based password reset (with token)
 - [ ] Add Socket.io authentication
 - [ ] Implement notification system (order updates, low stock alerts)
