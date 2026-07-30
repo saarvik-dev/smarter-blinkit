@@ -11,11 +11,10 @@ The project is now deployed and accessible online.
 ---
 
 **Platform Status & Refinements:**
-* 🟢 **Blinkit-Style Compact Frontend UI**: Product grids utilize a custom, compact grid configuration with a uniform height layout, clean image spacing inside frames, name clamping, and bottom-aligned checkout triggers.
-* 🟢 **Dynamic Leaf Brand Logo**: Integrates custom leaf logo assets dynamically blending across themes using CSS filters (`mix-blend-mode` for cream theme, `filter: invert(1)` for dark theme) and gradient fills.
+
+
 * 🟢 **Dynamic Ratings & Weighted Bayesian Reviews**: Real-time 1-5 star ratings with Bayesian seed dampening priors and shop aggregates recalculation.
 * 🟢 **Smart Delivery Route Visualization**: Interactive Leaflet maps rendering multi-stop store routes computed by OSRM API with horizontal store-to-store progress flows.
-* 🟢 **Staff-Level Backend Auditing**: Generated a comprehensive 24-file reference architecture guide under `backend-documentation/` mapping system dependencies, complexity profiling, and caching roadmaps.
 * 🟢 **AI Redundancy & Model Switcher**: High-availability multi-model switcher rotating Gemini models and Qwen-72B failovers.
 
 **Status: 🟢 Deployed & Optimized**
