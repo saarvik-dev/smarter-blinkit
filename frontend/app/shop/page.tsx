@@ -201,10 +201,10 @@ export default function ShopPage() {
                                         <div key={p._id} className={`product-card${p.stock === 0 ? ' out-of-stock' : ''}`}>
                                             <Link href={`/shop/${p._id}`}>
                                                 <div className="product-card-image">
-                                                    {p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-muted)' }}>{p.category?.charAt(0)}</span>}
+                                                    {p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> : <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-muted)' }}>{p.category?.charAt(0)}</span>}
                                                 </div>
                                                 <div className="product-card-body">
-                                                    <div className="product-card-name" style={{ height: '3rem', overflow: 'hidden' }}>{p.name}</div>
+                                                    <div className="product-card-name">{p.name}</div>
                                                     {stockChip(p.stock) && <div style={{ marginBottom: '4px' }}>{stockChip(p.stock)}</div>}
                                                     <div className="product-card-footer">
                                                         <div>
@@ -219,6 +219,7 @@ export default function ShopPage() {
                                                                 addToCart({ productId: p._id, name: p.name, price: p.price, quantity: 1, image: p.image, shopId: p.shopId?._id, shopName: p.shopId?.name });
                                                             }}
                                                             className="btn btn-primary btn-sm"
+                                                            style={{ padding: '3px 8px', fontSize: '0.7rem' }}
                                                         >
                                                             {p.stock === 0 ? 'N/A' : 'Add'}
                                                         </button>
@@ -270,36 +271,36 @@ export default function ShopPage() {
                                 const trendingProducts = lightlyShuffledTrending.slice(0, 8);
 
                                 const renderProductCard = (p: any, compact = false) => (
-                                    <div key={p._id} className={`product-card${p.stock === 0 ? ' out-of-stock' : ''}`} style={{ width: compact ? '190px' : '230px' }}>
-                                        <Link href={`/shop/${p._id}`}>
-                                            <div className="product-card-image">
-                                                {p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-muted)' }}>{p.category?.charAt(0)}</span>}
-                                            </div>
-                                            <div className="product-card-body" style={{ padding: '12px 14px' }}>
-                                                <div className="product-card-name" style={{ fontSize: '0.88rem', height: '2.4rem', overflow: 'hidden' }}>{p.name}</div>
-                                                {stockChip(p.stock) && <div style={{ marginBottom: '4px' }}>{stockChip(p.stock)}</div>}
-                                                <div className="product-card-footer" style={{ marginTop: '8px' }}>
-                                                    <div>
-                                                        <div className="product-card-price" style={{ fontFamily: 'var(--font-mono)' }}>₹{p.price}</div>
-                                                        <div className="product-card-unit">per {p.unit}</div>
-                                                    </div>
-                                                    <button
-                                                        disabled={p.stock === 0}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            if (!user) { toast('Please login to add to cart', 'error'); return; }
-                                                            addToCart({ productId: p._id, name: p.name, price: p.price, quantity: 1, image: p.image, shopId: p.shopId?._id, shopName: p.shopId?.name });
-                                                        }}
-                                                        className="btn btn-primary btn-sm"
-                                                        style={{ padding: '4px 10px', fontSize: '0.75rem' }}
-                                                    >
-                                                        {p.stock === 0 ? 'N/A' : 'Add'}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                );
+                                     <div key={p._id} className={`product-card${p.stock === 0 ? ' out-of-stock' : ''}`} style={{ width: compact ? '145px' : '165px', flexShrink: 0 }}>
+                                         <Link href={`/shop/${p._id}`}>
+                                             <div className="product-card-image">
+                                                 {p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> : <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-muted)' }}>{p.category?.charAt(0)}</span>}
+                                             </div>
+                                             <div className="product-card-body">
+                                                 <div className="product-card-name">{p.name}</div>
+                                                 {stockChip(p.stock) && <div style={{ marginBottom: '4px' }}>{stockChip(p.stock)}</div>}
+                                                 <div className="product-card-footer">
+                                                     <div>
+                                                         <div className="product-card-price" style={{ fontFamily: 'var(--font-mono)' }}>₹{p.price}</div>
+                                                         <div className="product-card-unit">per {p.unit}</div>
+                                                     </div>
+                                                     <button
+                                                         disabled={p.stock === 0}
+                                                         onClick={(e) => {
+                                                             e.preventDefault();
+                                                             if (!user) { toast('Please login to add to cart', 'error'); return; }
+                                                             addToCart({ productId: p._id, name: p.name, price: p.price, quantity: 1, image: p.image, shopId: p.shopId?._id, shopName: p.shopId?.name });
+                                                         }}
+                                                         className="btn btn-primary btn-sm"
+                                                         style={{ padding: '3px 8px', fontSize: '0.7rem' }}
+                                                     >
+                                                         {p.stock === 0 ? 'N/A' : 'Add'}
+                                                     </button>
+                                                 </div>
+                                             </div>
+                                         </Link>
+                                     </div>
+                                 );
 
                                 return (
                                     <>
