@@ -1,4 +1,6 @@
 'use client';
+
+/* eslint-disable @typescript-eslint/no-explicit-any, @next/next/no-img-element */
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -7,7 +9,7 @@ import { useApp } from '@/lib/context';
 import FaceRegister from '@/components/FaceRegister';
 import MapPicker from '@/components/MapPicker';
 import type { MapLocationData } from '@/components/MapPickerBase';
-import { fadeUp, staggerContainer } from '@/lib/animations';
+import { fadeUp } from '@/lib/animations';
 
 export default function RegisterPage() {
     const { register, toast } = useApp();
@@ -64,153 +66,260 @@ export default function RegisterPage() {
         router.replace(form.role === 'seller' ? '/dashboard' : '/shop');
     };
 
-    return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-            <motion.div variants={staggerContainer} initial="hidden" animate="visible"
-                style={{ width: '100%', maxWidth: step === 2 ? '800px' : '440px', transition: 'max-width 0.35s ease' }}>
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.12 }
+        }
+    };
+    
+    const childVariants = {
+        hidden: { opacity: 0, y: 12 },
+        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 20 } }
+    };
 
-                <motion.div variants={fadeUp} style={{ textAlign: 'center', marginBottom: '28px' }}>
-                    <Link href="/" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '36px', marginBottom: '24px', textDecoration: 'none' }}>
-                        <img
-                            src="/logo-leaf.jpg"
-                            alt="leaf"
-                            className="navbar-logo-leaf"
-                            style={{
-                                position: 'absolute',
-                                left: '-14px',
-                                top: '-6px',
-                                width: '32px',
-                                height: '32px',
-                                transform: 'rotate(-5deg)',
-                                pointerEvents: 'none',
-                                zIndex: 0,
-                            }}
+    return (
+        <div className="auth-split-container">
+            {/* Left Panel: Premium Editorial Grocery Campaign Banner */}
+            <div className="auth-left-panel">
+                <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 0 }}>
+                    <motion.img
+                        src="/auth-bg.jpg"
+                        alt="Premium groceries delivery"
+                        className="auth-left-image"
+                        style={{ objectPosition: '58% 50%' }} // Crops face to the right, heading lands on clean space
+                        animate={{ scale: [1, 1.01, 1] }}
+                        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                    <motion.div 
+                        className="auth-left-overlay" 
+                        animate={{ opacity: [0.95, 0.98, 0.95] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                </div>
+
+                <motion.div 
+                    className="auth-left-content"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <motion.div variants={childVariants} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <div style={{ fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: 0.55, fontFamily: 'var(--font-mono)' }}>
+                            Est. 2026 · Designed in Jaipur
+                        </div>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.85, fontFamily: 'var(--font-mono)' }}>
+                            SmarterBlinkit Marketplace
+                        </div>
+                    </motion.div>
+
+                    <div className="auth-left-hero">
+                        <motion.h1 
+                            variants={childVariants} 
+                            className="auth-left-title"
+                            style={{ fontSize: '2.7rem', lineHeight: '1.2', fontWeight: 600 }}
+                        >
+                            Everything you need, thoughtfully gathered.
+                        </motion.h1>
+                        
+                        <motion.p 
+                            variants={childVariants} 
+                            className="auth-left-subtitle"
+                        >
+                            Shop from trusted neighborhood stores with real inventory, thoughtfully organized around what you need.
+                        </motion.p>
+                        
+                        <motion.div 
+                            variants={childVariants} 
+                            style={{ width: '40px', height: '1px', background: 'rgba(255, 255, 255, 0.25)', margin: '28px 0' }}
                         />
-                        <span
-                            className="navbar-logo-text"
+                        
+                        <motion.p 
+                            variants={childVariants}
                             style={{
-                                position: 'relative',
-                                zIndex: 1,
-                                fontFamily: 'var(--font-display)',
-                                fontSize: '1.45rem',
-                                fontWeight: 700,
-                                letterSpacing: '-0.02em',
-                                paddingLeft: '14px',
+                                fontFamily: 'var(--font-body)',
+                                fontSize: '0.94rem',
+                                lineHeight: '1.65',
+                                fontStyle: 'italic',
+                                opacity: 0.72,
+                                marginTop: '44px',
+                                maxWidth: '440px',
+                                color: '#F5F0E8'
                             }}
                         >
-                            SmarterBlinkit
-                        </span>
-                    </Link>
-                    <AnimatePresence mode="wait">
-                        <motion.div key={step}
-                            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                            transition={{ duration: 0.3 }}>
-                            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 500, marginBottom: '8px' }}>
-                                {step === 1 ? 'Create Account' : step === 2 ? 'Set Location' : 'Face ID'}
-                            </h1>
-                            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-                                {step === 1 ? 'Join the marketplace' : step === 2 ? 'Pin your delivery location' : 'Enable fast login'}
-                            </p>
-                        </motion.div>
-                    </AnimatePresence>
-                </motion.div>
+                            Planning dinner should feel effortless. SmarterBlinkit connects recipes, nearby inventory, and local stores into one seamless experience.
+                        </motion.p>
+                    </div>
 
-                {/* Step Indicator — minimal line dots */}
-                <motion.div variants={fadeUp} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', justifyContent: 'center' }}>
-                    {[1, 2, 3].map((s, i) => (
-                        <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <div style={{
-                                width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontSize: '0.68rem', fontWeight: 600, fontFamily: 'var(--font-mono)',
-                                background: step >= s ? 'var(--accent)' : 'transparent',
-                                color: step >= s ? '#F5F0E8' : 'var(--text-muted)',
-                                border: step < s ? '1px solid var(--border)' : 'none',
-                                transition: 'all 0.3s ease'
-                            }}>
-                                {step > s ? '✓' : s}
-                            </div>
-                            {i < 2 && <div style={{ width: 40, height: 1, background: step > s ? 'var(--accent)' : 'var(--border)', transition: 'background 0.3s ease' }} />}
-                        </div>
-                    ))}
-                </motion.div>
-
-                {/* Role Picker (Step 1 only) */}
-                <AnimatePresence>
-                    {step === 1 && (
-                        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
-                            style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-                            {[{ v: 'buyer', label: 'Buyer', sub: 'Shop & explore' }, { v: 'seller', label: 'Seller', sub: 'Sell products' }].map(r => (
-                                <button key={r.v} onClick={() => setForm((f: any) => ({ ...f, role: r.v }))} type="button"
-                                    style={{ flex: 1, padding: '14px', borderRadius: 'var(--radius-md)', border: `1.5px solid ${form.role === r.v ? 'var(--accent)' : 'var(--border)'}`, background: form.role === r.v ? 'var(--accent-subtle)' : 'transparent', cursor: 'pointer', transition: 'all 0.2s ease', textAlign: 'center' }}>
-                                    <div style={{ fontWeight: 600, fontSize: '0.88rem', color: form.role === r.v ? 'var(--accent)' : 'var(--text-primary)' }}>{r.label}</div>
-                                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px' }}>{r.sub}</div>
-                                </button>
-                            ))}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                <AnimatePresence mode="wait">
-                    <motion.div key={step}
-                        initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
-                        transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        style={{ padding: step === 2 ? '2px' : '32px', overflow: 'hidden', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
-
-                        {step === 1 && (
-                            <form onSubmit={handleStep1Submit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                                    <div className="form-group">
-                                        <label className="form-label">Full Name</label>
-                                        <input className="form-input" placeholder="John Doe" value={form.name} onChange={set('name')} required />
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="form-label">Phone</label>
-                                        <input className="form-input" placeholder="+91 98765..." value={form.phone} onChange={set('phone')} required />
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <label className="form-label">Email</label>
-                                    <input className="form-input" type="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
-                                </div>
-                                <div className="form-group">
-                                    <label className="form-label">Password</label>
-                                    <input className="form-input" type="password" placeholder="Min 6 characters" value={form.password} onChange={set('password')} required minLength={6} />
-                                </div>
-                                {form.role === 'seller' && (
-                                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="form-group">
-                                        <label className="form-label">Shop Name</label>
-                                        <input className="form-input" placeholder="My Store" value={form.shopName} onChange={set('shopName')} required />
-                                    </motion.div>
-                                )}
-                                <button type="submit" className="btn btn-primary w-full" style={{ marginTop: '8px' }}>
-                                    Continue to Location
-                                </button>
-                            </form>
-                        )}
-
-                        {step === 2 && (
-                            <div style={{ width: '100%', height: '600px', display: 'flex', flexDirection: 'column' }}>
-                                <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border)' }}>
-                                    <button className="btn btn-ghost btn-sm" onClick={() => setStep(1)}>← Back</button>
-                                    <span style={{ fontWeight: 500, fontSize: '0.88rem', color: 'var(--text-primary)' }}>Move the pin to your delivery location</span>
-                                </div>
-                                <MapPicker onConfirm={handleLocationConfirm} buttonText={loading ? "Creating Account..." : "Confirm & Create Account"} />
-                            </div>
-                        )}
-
-                        {step === 3 && (
-                            <FaceRegister userRole={form.role} onSkip={handleSkipFace} />
-                        )}
+                    <motion.div variants={childVariants} style={{ fontSize: '0.65rem', opacity: 0.4, fontFamily: 'var(--font-mono)', marginTop: '36px' }}>
+                        © 2026 SmarterBlinkit. All rights reserved.
                     </motion.div>
-                </AnimatePresence>
+                </motion.div>
+            </div>
 
-                {step === 1 && (
-                    <motion.p variants={fadeUp} style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                        Already have an account?{' '}
-                        <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 600 }}>Sign in</Link>
-                    </motion.p>
-                )}
-            </motion.div>
+            {/* Right Panel: Clean Authentication card */}
+            <div className="auth-right-panel" style={{ justifyContent: step === 2 ? 'flex-start' : 'center', paddingTop: step === 2 ? '80px' : '48px' }}>
+                <motion.div
+                    className="auth-card-container"
+                    style={{ maxWidth: step === 2 ? '780px' : '450px', transition: 'max-width 0.35s ease' }}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+                >
+                    {/* Brand Logo */}
+                    <div style={{ marginBottom: '28px', textAlign: 'left' }}>
+                        <Link href="/" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '36px', textDecoration: 'none' }}>
+                            <img
+                                src="/logo-leaf.jpg"
+                                alt="leaf"
+                                className="navbar-logo-leaf"
+                                style={{
+                                    position: 'absolute',
+                                    left: '-14px',
+                                    top: '-6px',
+                                    width: '32px',
+                                    height: '32px',
+                                    transform: 'rotate(-5deg)',
+                                    pointerEvents: 'none',
+                                    zIndex: 0,
+                                }}
+                            />
+                            <span
+                                className="navbar-logo-text"
+                                style={{
+                                    position: 'relative',
+                                    zIndex: 1,
+                                    fontFamily: 'var(--font-display)',
+                                    fontSize: '1.45rem',
+                                    fontWeight: 700,
+                                    letterSpacing: '-0.02em',
+                                    paddingLeft: '14px',
+                                    color: 'var(--accent)',
+                                }}
+                            >
+                                SmarterBlinkit
+                            </span>
+                        </Link>
+                    </div>
+
+                    <div style={{ padding: step === 2 ? '12px' : '40px', background: '#FCFBF8', border: '1px solid rgba(31, 61, 43, 0.03)', borderRadius: '24px', boxShadow: '0 15px 45px rgba(31, 61, 43, 0.02)', overflow: 'hidden' }}>
+                        {step !== 2 && (
+                            <div style={{ marginBottom: '28px' }}>
+                                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 600, marginBottom: '6px', color: 'var(--text-primary)' }}>
+                                    {step === 1 ? 'Create Account' : 'Face ID'}
+                                </h2>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                    {step === 1 ? 'Join the marketplace today' : 'Enable fast secure login'}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Step Indicator — minimal dots */}
+                        {step !== 2 && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+                                {[1, 2, 3].map((s, i) => (
+                                    <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <div style={{
+                                            width: 22, height: 22, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontSize: '0.65rem', fontWeight: 600, fontFamily: 'var(--font-mono)',
+                                            background: step >= s ? 'var(--accent)' : 'transparent',
+                                            color: step >= s ? '#F5F0E8' : 'var(--text-muted)',
+                                            border: step < s ? '1px solid var(--border)' : 'none',
+                                            transition: 'all 0.3s ease'
+                                        }}>
+                                            {step > s ? '✓' : s}
+                                        </div>
+                                        {i < 2 && <div style={{ width: 30, height: 1, background: step > s ? 'var(--accent)' : 'var(--border)', transition: 'background 0.3s ease' }} />}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Role Picker (Step 1 only) */}
+                        {step === 1 && (
+                            <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+                                {[{ v: 'buyer', label: 'Buyer', sub: 'Shop & explore' }, { v: 'seller', label: 'Seller', sub: 'Sell products' }].map(r => (
+                                    <button key={r.v} onClick={() => setForm((f: any) => ({ ...f, role: r.v }))} type="button"
+                                        style={{ flex: 1, padding: '12px', borderRadius: '10px', border: `1.5px solid ${form.role === r.v ? 'var(--accent)' : 'var(--border)'}`, background: form.role === r.v ? 'var(--accent-subtle)' : 'transparent', cursor: 'pointer', transition: 'all 0.2s ease', textAlign: 'center' }}>
+                                        <div style={{ fontWeight: 600, fontSize: '0.82rem', color: form.role === r.v ? 'var(--accent)' : 'var(--text-primary)' }}>{r.label}</div>
+                                        <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>{r.sub}</div>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        <AnimatePresence mode="wait">
+                            <motion.div key={step}
+                                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {step === 1 && (
+                                    <form onSubmit={handleStep1Submit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                                            <div className="form-group">
+                                                <label className="form-label" style={{ fontWeight: 500, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Full Name</label>
+                                                <input className="auth-form-input" placeholder="John Doe" value={form.name} onChange={set('name')} required />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label" style={{ fontWeight: 500, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Phone</label>
+                                                <input className="auth-form-input" placeholder="+91 98765..." value={form.phone} onChange={set('phone')} required />
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label" style={{ fontWeight: 500, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Email</label>
+                                            <input className="auth-form-input" type="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label" style={{ fontWeight: 500, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Password</label>
+                                            <input className="auth-form-input" type="password" placeholder="Min 6 characters" value={form.password} onChange={set('password')} required minLength={6} />
+                                        </div>
+                                        {form.role === 'seller' && (
+                                            <motion.div variants={fadeUp} className="form-group">
+                                                <label className="form-label" style={{ fontWeight: 500, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Shop Name</label>
+                                                <input className="auth-form-input" placeholder="My Store" value={form.shopName} onChange={set('shopName')} required />
+                                            </motion.div>
+                                        )}
+                                        <motion.button 
+                                            type="submit" 
+                                            className="btn btn-primary w-full" 
+                                            style={{ marginTop: '8px', borderRadius: '10px', padding: '12px' }}
+                                            whileHover={{ y: -1, boxShadow: '0 4px 12px rgba(31, 61, 43, 0.08)' }}
+                                            whileTap={{ scale: 0.98 }}
+                                            transition={{ duration: 0.15 }}
+                                        >
+                                            Continue to Location
+                                        </motion.button>
+                                    </form>
+                                )}
+
+                                {step === 2 && (
+                                    <div style={{ width: '100%', height: '580px', display: 'flex', flexDirection: 'column' }}>
+                                        <div style={{ padding: '14px 8px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border)' }}>
+                                            <button className="btn btn-ghost btn-sm" onClick={() => setStep(1)}>← Back</button>
+                                            <span style={{ fontWeight: 500, fontSize: '0.85rem', color: 'var(--text-primary)' }}>Confirm delivery location coordinates</span>
+                                        </div>
+                                        <div style={{ flex: 1, position: 'relative' }}>
+                                            <MapPicker onConfirm={handleLocationConfirm} buttonText={loading ? "Creating Account..." : "Confirm & Create Account"} />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {step === 3 && (
+                                    <FaceRegister userRole={form.role} onSkip={handleSkipFace} />
+                                )}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+
+                    {step === 1 && (
+                        <p style={{ textAlign: 'left', paddingLeft: '8px', marginTop: '24px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                            Already have an account?{' '}
+                            <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 600 }}>Sign in</Link>
+                        </p>
+                    )}
+                </motion.div>
+            </div>
         </div>
     );
 }
