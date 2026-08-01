@@ -13,6 +13,7 @@ interface MultiSelectDropdownProps {
     onChange: (selected: string[]) => void;
     placeholder?: string;
     allLabel?: string;
+    variant?: 'default' | 'minimal';
 }
 
 export default function MultiSelectDropdown({
@@ -21,6 +22,7 @@ export default function MultiSelectDropdown({
     onChange,
     placeholder = 'Select...',
     allLabel = 'All',
+    variant = 'default',
 }: MultiSelectDropdownProps) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState('');
@@ -73,17 +75,17 @@ export default function MultiSelectDropdown({
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    padding: '8px 12px',
-                    borderRadius: 'var(--radius-md)',
-                    border: `1.5px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
-                    background: isActive ? 'var(--accent-subtle)' : 'var(--bg-elevated)',
-                    color: isActive ? 'var(--accent)' : 'var(--text-primary)',
+                    padding: variant === 'minimal' ? '6px 0' : '8px 12px',
+                    borderRadius: variant === 'minimal' ? 0 : 'var(--radius-md)',
+                    border: variant === 'minimal' ? 'none' : `1.5px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
+                    background: variant === 'minimal' ? 'transparent' : (isActive ? 'var(--accent-subtle)' : 'var(--bg-elevated)'),
+                    color: isActive ? 'var(--accent)' : (variant === 'minimal' ? 'var(--text-secondary)' : 'var(--text-primary)'),
                     cursor: 'pointer',
                     fontWeight: isActive ? 600 : 400,
-                    fontSize: '0.875rem',
+                    fontSize: variant === 'minimal' ? '0.85rem' : '0.875rem',
                     width: '100%',
                     justifyContent: 'space-between',
-                    transition: 'border-color 0.15s, background 0.15s',
+                    transition: 'border-color 0.15s, background 0.15s, color 0.15s',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                 }}

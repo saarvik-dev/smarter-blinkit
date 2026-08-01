@@ -11,18 +11,22 @@ export default function Navbar() {
     const pathname = usePathname();
     const router = useRouter();
 
+    const [scrolled, setScrolled] = useState(false);
+    const [scrollY, setScrollY] = useState(0);
+    const [cartBounce, setCartBounce] = useState(false);
+    const prevCartCount = useRef(cartCount);
+
     useEffect(() => {
         const savedTheme = localStorage.getItem('sb_theme');
         if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
-        const handleScroll = () => setScrolled(window.scrollY > 20);
+        const handleScroll = () => {
+            setScrollY(window.scrollY);
+            setScrolled(window.scrollY > 20);
+        };
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    const [scrolled, setScrolled] = useState(false);
-    const [cartBounce, setCartBounce] = useState(false);
-    const prevCartCount = useRef(cartCount);
 
     useEffect(() => {
         if (cartCount > prevCartCount.current) {
@@ -38,13 +42,25 @@ export default function Navbar() {
         }
     };
 
+    const navbarOpacity = Math.min(0.72 + (scrollY / 300) * 0.24, 0.96);
+    const navbarBlur = Math.min(16 + (scrollY / 300) * 8, 24);
+
     return (
-        <motion.nav className={`navbar${scrolled ? ' scrolled' : ''}`}
+        <motion.nav 
+            className={`navbar${scrolled ? ' scrolled' : ''}`}
+            style={{
+                background: `rgba(247, 243, 234, ${navbarOpacity})`,
+                backdropFilter: `blur(${navbarBlur}px)`,
+                WebkitBackdropFilter: `blur(${navbarBlur}px)`,
+                borderBottom: '1px solid rgba(31, 61, 43, 0.08)',
+                boxShadow: `0 4px 30px rgba(31, 61, 43, ${Math.min((scrollY / 300) * 0.03, 0.03)})`,
+            }}
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}>
+            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
             <div className="navbar-inner">
-                <Link href="/" className="navbar-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', height: '36px' }}>
+                <Link href="/" className="navbar-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', height: '36px', marginLeft: '12px' }}>
                     <img
                         src="/logo-leaf.jpg"
                         alt="leaf"
@@ -75,7 +91,7 @@ export default function Navbar() {
                         SmarterBlinkit
                     </span>
                 </Link>
-
+ 
                 <div className="navbar-links">
                     {user ? (
                         <>
@@ -95,7 +111,18 @@ export default function Navbar() {
                                 <motion.button
                                     className="btn btn-secondary btn-sm"
                                     onClick={() => setCartOpen(true)}
-                                    style={{ gap: '6px', position: 'relative', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}
+                                    style={{
+                                        gap: '6px',
+                                        position: 'relative',
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: '0.72rem',
+                                        background: 'rgba(250, 247, 241, 0.6)',
+                                        border: '1px solid rgba(31, 61, 43, 0.08)',
+                                        borderRadius: '6px',
+                                        color: 'var(--text-secondary)',
+                                        boxShadow: 'none',
+                                        padding: '5px 12px',
+                                    }}
                                     animate={cartBounce ? { scale: [1, 1.15, 0.95, 1.05, 1] } : { scale: 1 }}
                                     transition={{ duration: 0.5, ease: 'easeOut' }}
                                 >
@@ -115,7 +142,7 @@ export default function Navbar() {
                             )}
                             {/* Address Switcher */}
                             {user.role === 'buyer' && user.savedAddresses && user.savedAddresses.length > 0 && (
-                                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', padding: '4px 12px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer', maxWidth: '180px' }}
+                                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', padding: '4px 12px', borderRadius: '8px', border: '1px solid rgba(31, 61, 43, 0.08)', background: 'rgba(250, 247, 241, 0.4)', cursor: 'pointer', maxWidth: '180px' }}
                                     onMouseEnter={() => { const el = document.getElementById('navbar-addr-dropdown'); if (el) el.style.display = 'block'; }}
                                     onMouseLeave={() => { const el = document.getElementById('navbar-addr-dropdown'); if (el) el.style.display = 'none'; }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: '100%' }}>
