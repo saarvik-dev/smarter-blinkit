@@ -202,7 +202,7 @@ h4 {
   left: 0;
   right: 0;
   z-index: 100;
-  height: 64px;
+  height: 60px; /* Reduced header height by 17% for a lightweight feel */
   display: flex;
   align-items: center;
   transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
@@ -227,7 +227,7 @@ h4 {
   align-items: center;
   gap: 10px;
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.25rem; /* Slightly reduced logo text size */
   font-weight: 700;
   position: relative;
 }
@@ -258,60 +258,56 @@ h4 {
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 24px; /* Increased gap for more whitespace between navigation groups */
 }
 
 .navbar-link {
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 0.825rem;
+  padding: 8px 0; /* Padding top/bottom only for clean underline alignment */
+  border-radius: 0; /* Removed capsule shape */
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-secondary);
   transition: var(--transition);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .navbar-link:hover {
   color: var(--text-primary);
-  background: rgba(250, 247, 241, 0.5);
+  background: transparent !important;
 }
 
 .navbar-link.active {
   color: var(--accent);
-  background: rgba(250, 247, 241, 0.85);
-  box-shadow: inset 0 1px 3px rgba(31, 61, 43, 0.03);
+  font-weight: 600; /* Slightly darker text weight for active link */
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .navbar-link::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 1.5px;
+  left: 0;
+  right: 0;
+  height: 1.5px; /* Elegant thin bottom underline */
   background: var(--accent);
-  transform: translateX(-50%);
-  transition: width 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border-radius: 4px;
+  transform: scaleX(0);
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
 }
 
 .navbar-link:hover::after,
 .navbar-link.active::after {
-  width: 70%;
+  transform: scaleX(1);
 }
 
-.navbar-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 15%;
-  right: 15%;
-  transform: none;
-  width: auto;
-  height: 1.5px;
-  background: var(--accent);
-  border-radius: 999px;
+/* Custom Dropdown item styling */
+.navbar-dropdown-item:hover {
+  background: rgba(250, 247, 241, 0.85);
+  color: var(--text-primary) !important;
 }
 
 /* ── Buttons ────────────────────────────────────────────────── */
@@ -4979,4 +4975,59 @@ h4 {
 .auth-form-input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(31, 61, 43, 0.05);
+}
+
+/* Category Navigation & Intent Cards styling */
+.ai-category-tab {
+  background: transparent;
+  border: none;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s, font-weight 0.2s;
+}
+
+.ai-category-tab:hover {
+  color: var(--accent);
+}
+
+.ai-category-tab.active {
+  color: var(--accent);
+  font-weight: 600;
+  border-bottom-color: var(--accent);
+}
+
+.shop-intent-card {
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.shop-intent-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(31, 61, 43, 0.18) !important;
+  box-shadow: 0 8px 24px rgba(31, 61, 43, 0.03);
+  background-color: #FCFBF8 !important;
+}
+
+/* Skeleton loader styles */
+.skeleton-pulse {
+  background: rgba(31, 61, 43, 0.05);
+  animation: pulse-shimmer 1.8s infinite ease-in-out;
+}
+
+.skeleton-text {
+  height: 12px;
+  border-radius: 4px;
+  background: rgba(31, 61, 43, 0.06);
+}
+
+@keyframes pulse-shimmer {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.6; }
 }

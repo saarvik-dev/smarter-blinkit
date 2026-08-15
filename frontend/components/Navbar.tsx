@@ -1,9 +1,9 @@
 'use client';
+
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/lib/context';
-
 import { useEffect, useState, useRef } from 'react';
 
 export default function Navbar() {
@@ -13,8 +13,8 @@ export default function Navbar() {
 
     const [scrolled, setScrolled] = useState(false);
     const [scrollY, setScrollY] = useState(0);
-    const [cartBounce, setCartBounce] = useState(false);
-    const prevCartCount = useRef(cartCount);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('sb_theme');
@@ -25,16 +25,19 @@ export default function Navbar() {
             setScrolled(window.scrollY > 20);
         };
         window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
 
-    useEffect(() => {
-        if (cartCount > prevCartCount.current) {
-            setCartBounce(true);
-            setTimeout(() => setCartBounce(false), 600);
-        }
-        prevCartCount.current = cartCount;
-    }, [cartCount]);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleLogout = () => {
         if (logout()) {
@@ -42,25 +45,27 @@ export default function Navbar() {
         }
     };
 
-    const navbarOpacity = Math.min(0.72 + (scrollY / 300) * 0.24, 0.96);
-    const navbarBlur = Math.min(16 + (scrollY / 300) * 8, 24);
+    // Warm translucent beige background style with lower opacity & higher backdrop blur
+    const navbarOpacity = Math.min(0.70 + (scrollY / 300) * 0.18, 0.88);
+    const navbarBlur = Math.min(18 + (scrollY / 300) * 10, 28);
 
     return (
         <motion.nav 
             className={`navbar${scrolled ? ' scrolled' : ''}`}
             style={{
-                background: `rgba(247, 243, 234, ${navbarOpacity})`,
+                background: `rgba(245, 241, 231, ${navbarOpacity})`, // Warm translucent beige
                 backdropFilter: `blur(${navbarBlur}px)`,
                 WebkitBackdropFilter: `blur(${navbarBlur}px)`,
-                borderBottom: '1px solid rgba(31, 61, 43, 0.08)',
-                boxShadow: `0 4px 30px rgba(31, 61, 43, ${Math.min((scrollY / 300) * 0.03, 0.03)})`,
+                borderBottom: '1px solid rgba(31, 61, 43, 0.05)', // Subtle bottom border
+                boxShadow: scrolled ? '0 4px 30px rgba(31, 61, 43, 0.015)' : 'none',
             }}
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
             <div className="navbar-inner">
-                <Link href="/" className="navbar-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', height: '36px', marginLeft: '12px' }}>
+                {/* Decreased logo size slightly to align with the lightweight header layout */}
+                <Link href="/" className="navbar-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', height: '36px', marginLeft: '12px', textDecoration: 'none' }}>
                     <img
                         src="/logo-leaf.jpg"
                         alt="leaf"
@@ -69,8 +74,8 @@ export default function Navbar() {
                             position: 'absolute',
                             left: '-14px',
                             top: '-8px',
-                            width: '32px',
-                            height: '32px',
+                            width: '33px',
+                            height: '33px',
                             transform: 'rotate(-5deg)',
                             pointerEvents: 'none',
                             zIndex: 0,
@@ -85,61 +90,55 @@ export default function Navbar() {
                             fontSize: '1.25rem',
                             fontWeight: 700,
                             letterSpacing: '-0.02em',
-                            paddingLeft: '14px',
+                            paddingLeft: '13px',
+                            color: 'var(--accent)',
                         }}
                     >
                         SmarterBlinkit
                     </span>
                 </Link>
- 
+
                 <div className="navbar-links">
                     {user ? (
                         <>
-                            <Link href="/dashboard" className={`navbar-link ${pathname.startsWith('/dashboard') ? 'active' : ''}`}>Dashboard</Link>
+                            {/* Simplified Links: Keep only Shop, Agent, Live */}
                             {user.role === 'buyer' && (
                                 <>
-                                    <Link href="/shop" className={`navbar-link ${pathname.startsWith('/shop') ? 'active' : ''}`}>Shop</Link>
-                                    <Link href="/ai-agent" className={`navbar-link ${pathname.startsWith('/ai-agent') ? 'active' : ''}`}>Agent</Link>
-                                    <Link href="/storeboard" className={`navbar-link ${pathname.startsWith('/storeboard') ? 'active' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <Link href="/shop" className={`navbar-link ${pathname === '/shop' ? 'active' : ''}`}>
+                                        Shop
+                                    </Link>
+                                    <Link href="/ai-agent" className={`navbar-link ${pathname === '/ai-agent' ? 'active' : ''}`}>
+                                        Agent
+                                    </Link>
+                                    <Link href="/storeboard" className={`navbar-link ${pathname === '/storeboard' ? 'active' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                         <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--danger)', display: 'inline-block', flexShrink: 0 }} />
                                         Live
                                     </Link>
-                                    <Link href="/money-map" className={`navbar-link ${pathname.startsWith('/money-map') ? 'active' : ''}`}>Map</Link>
                                 </>
                             )}
+
+                            {/* Understated Cart Presentation */}
                             {user.role === 'buyer' && (
-                                <motion.button
-                                    className="btn btn-secondary btn-sm"
+                                <button
                                     onClick={() => setCartOpen(true)}
                                     style={{
-                                        gap: '6px',
-                                        position: 'relative',
-                                        fontFamily: 'var(--font-mono)',
-                                        fontSize: '0.72rem',
-                                        background: 'rgba(250, 247, 241, 0.6)',
-                                        border: '1px solid rgba(31, 61, 43, 0.08)',
-                                        borderRadius: '6px',
+                                        background: 'transparent',
+                                        border: 'none',
                                         color: 'var(--text-secondary)',
-                                        boxShadow: 'none',
-                                        padding: '5px 12px',
+                                        fontSize: '0.85rem',
+                                        fontWeight: 500,
+                                        cursor: 'pointer',
+                                        padding: '8px 0',
+                                        fontFamily: 'var(--font-body)',
+                                        transition: 'color 0.2s',
                                     }}
-                                    animate={cartBounce ? { scale: [1, 1.15, 0.95, 1.05, 1] } : { scale: 1 }}
-                                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
                                 >
-                                    <AnimatePresence mode="popLayout">
-                                        <motion.span
-                                            key={cartCount}
-                                            initial={{ scale: 0.5, opacity: 0, y: -8 }}
-                                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                                            exit={{ scale: 0.5, opacity: 0, y: 8 }}
-                                            transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] }}
-                                            style={{ display: 'inline-block', minWidth: '1ch' }}
-                                        >
-                                            Cart ({cartCount})
-                                        </motion.span>
-                                    </AnimatePresence>
-                                </motion.button>
+                                    Cart ({cartCount})
+                                </button>
                             )}
+
                             {/* Address Switcher */}
                             {user.role === 'buyer' && user.savedAddresses && user.savedAddresses.length > 0 && (
                                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center', padding: '4px 12px', borderRadius: '8px', border: '1px solid rgba(31, 61, 43, 0.08)', background: 'rgba(250, 247, 241, 0.4)', cursor: 'pointer', maxWidth: '180px' }}
@@ -190,41 +189,152 @@ export default function Navbar() {
                                 </div>
                             )}
 
-                            <div style={{ width: 1, height: 16, background: 'var(--border)' }} />
-                            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                                {user.name.split(' ')[0]}
-                            </span>
+                            {/* Clean Account Section Dropdown */}
+                            <div style={{ position: 'relative' }} ref={dropdownRef}>
+                                <button 
+                                    onClick={() => setDropdownOpen(!dropdownOpen)} 
+                                    style={{
+                                        background: 'transparent',
+                                        border: 'none',
+                                        color: 'var(--text-secondary)',
+                                        fontSize: '0.85rem',
+                                        fontWeight: 500,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        padding: '8px 0',
+                                        fontFamily: 'var(--font-body)',
+                                        transition: 'color 0.2s',
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                                >
+                                    <span>{user.name.split(' ')[0]}</span>
+                                    <span style={{ fontSize: '0.55rem', opacity: 0.7 }}>▼</span>
+                                </button>
 
-                            {/* Theme Toggle */}
-                            <button className="btn btn-ghost btn-sm" onClick={() => {
-                                const current = document.documentElement.getAttribute('data-theme');
-                                const newTheme = current === 'dark' ? '' : 'dark';
-                                if (newTheme) {
-                                    document.documentElement.setAttribute('data-theme', newTheme);
-                                } else {
-                                    document.documentElement.removeAttribute('data-theme');
-                                }
-                                localStorage.setItem('sb_theme', newTheme || 'light');
-                            }} style={{ fontSize: '0.78rem', padding: '4px 8px', fontFamily: 'var(--font-mono)' }} title="Toggle Theme">
-                                ◐
-                            </button>
+                                <AnimatePresence>
+                                    {dropdownOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 8 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 8 }}
+                                            transition={{ duration: 0.15 }}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '100%',
+                                                right: 0,
+                                                marginTop: '8px',
+                                                background: '#FCFBF8',
+                                                border: '1px solid rgba(31, 61, 43, 0.08)',
+                                                borderRadius: '10px',
+                                                padding: '6px',
+                                                minWidth: '160px',
+                                                boxShadow: '0 10px 30px rgba(31, 61, 43, 0.04)',
+                                                zIndex: 1000,
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '2px',
+                                            }}
+                                        >
+                                            <Link 
+                                                href="/dashboard" 
+                                                onClick={() => setDropdownOpen(false)}
+                                                style={{
+                                                    padding: '8px 12px',
+                                                    fontSize: '0.8rem',
+                                                    color: 'var(--text-secondary)',
+                                                    borderRadius: '6px',
+                                                    textDecoration: 'none',
+                                                    transition: 'background 0.2s, color 0.2s',
+                                                }}
+                                                className="navbar-dropdown-item"
+                                            >
+                                                Dashboard
+                                            </Link>
+                                            
+                                            {user.role === 'buyer' && (
+                                                <Link 
+                                                    href="/money-map" 
+                                                    onClick={() => setDropdownOpen(false)}
+                                                    style={{
+                                                        padding: '8px 12px',
+                                                        fontSize: '0.8rem',
+                                                        color: 'var(--text-secondary)',
+                                                        borderRadius: '6px',
+                                                        textDecoration: 'none',
+                                                        transition: 'background 0.2s, color 0.2s',
+                                                    }}
+                                                    className="navbar-dropdown-item"
+                                                >
+                                                    Map
+                                                </Link>
+                                            )}
 
-                            <button className="btn btn-ghost btn-sm" onClick={handleLogout} style={{ fontSize: '0.78rem' }}>Sign out</button>
+                                            <button
+                                                onClick={() => {
+                                                    const current = document.documentElement.getAttribute('data-theme');
+                                                    const newTheme = current === 'dark' ? '' : 'dark';
+                                                    if (newTheme) {
+                                                        document.documentElement.setAttribute('data-theme', newTheme);
+                                                    } else {
+                                                        document.documentElement.removeAttribute('data-theme');
+                                                    }
+                                                    localStorage.setItem('sb_theme', newTheme || 'light');
+                                                    setDropdownOpen(false);
+                                                }}
+                                                style={{
+                                                    background: 'transparent',
+                                                    border: 'none',
+                                                    textAlign: 'left',
+                                                    padding: '8px 12px',
+                                                    fontSize: '0.8rem',
+                                                    color: 'var(--text-secondary)',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-between',
+                                                }}
+                                                className="navbar-dropdown-item"
+                                            >
+                                                <span>Theme</span>
+                                                <span style={{ fontSize: '0.78rem' }}>◐</span>
+                                            </button>
+
+                                            <div style={{ height: '1px', background: 'rgba(31, 61, 43, 0.06)', margin: '4px 0' }} />
+                                            
+                                            <button
+                                                onClick={() => {
+                                                    setDropdownOpen(false);
+                                                    handleLogout();
+                                                }}
+                                                style={{
+                                                    background: 'transparent',
+                                                    border: 'none',
+                                                    textAlign: 'left',
+                                                    padding: '8px 12px',
+                                                    fontSize: '0.8rem',
+                                                    color: 'var(--danger)',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    width: '100%',
+                                                }}
+                                                className="navbar-dropdown-item"
+                                            >
+                                                Sign out
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
                         </>
                     ) : (
                         <>
                             <Link href="/login" className="navbar-link">Sign in</Link>
-                            <button className="btn btn-ghost btn-sm" onClick={() => {
-                                const current = document.documentElement.getAttribute('data-theme');
-                                const newTheme = current === 'dark' ? '' : 'dark';
-                                if (newTheme) {
-                                    document.documentElement.setAttribute('data-theme', newTheme);
-                                } else {
-                                    document.documentElement.removeAttribute('data-theme');
-                                }
-                                localStorage.setItem('sb_theme', newTheme || 'light');
-                            }} style={{ fontSize: '0.78rem', padding: '6px 8px', fontFamily: 'var(--font-mono)' }} title="Toggle Theme">◐</button>
-                            <Link href="/register" className="btn btn-primary btn-sm">Get started</Link>
+                            <Link href="/register" className="btn btn-primary btn-sm" style={{ padding: '8px 18px', fontSize: '0.825rem' }}>Get started</Link>
                         </>
                     )}
                 </div>

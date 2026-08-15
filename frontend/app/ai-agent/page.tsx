@@ -97,24 +97,17 @@ export default function AIAgentPage() {
             setLoadingStep(0);
             return;
         }
-        const timer1 = setTimeout(() => setLoadingStep(1), 1500);
-        const timer2 = setTimeout(() => setLoadingStep(2), 3000);
-        const timer3 = setTimeout(() => setLoadingStep(3), 4500);
+        const timer1 = setTimeout(() => setLoadingStep(1), 1200);
+        const timer2 = setTimeout(() => setLoadingStep(2), 2400);
+        const timer3 = setTimeout(() => setLoadingStep(3), 3600);
+        const timer4 = setTimeout(() => setLoadingStep(4), 4800);
         return () => {
             clearTimeout(timer1);
             clearTimeout(timer2);
             clearTimeout(timer3);
+            clearTimeout(timer4);
         };
     }, [loading]);
-
-    const getLoadingMessage = () => {
-        switch (loadingStep) {
-            case 0: return 'Understanding your request...';
-            case 1: return 'Finding nearby stores and ingredients...';
-            case 2: return 'Matching product selections...';
-            default: return 'Preparing your shopping list...';
-        }
-    };
 
     const triggerApiCall = useCallback(async (q: string) => {
         try {
@@ -253,22 +246,22 @@ export default function AIAgentPage() {
                 scale: 0.98,
                 y: 0,
                 opacity: 0.12,
-                filter: 'blur(1.5px) saturate(80%) contrast(90%) brightness(96%)',
+                filter: 'blur(0.8px) saturate(75%) contrast(90%) brightness(96%)',
             };
         }
         if (isFocused) {
             return {
                 scale: 1.01,
                 y: -3,
-                opacity: 0.95,
-                filter: 'blur(1.4px) saturate(83%) contrast(88%) brightness(95%)',
+                opacity: 0.96,
+                filter: 'blur(0px) saturate(95%) contrast(95%) brightness(98%)',
             };
         }
         return {
             scale: 1.00,
             y: 0,
-            opacity: 0.85,
-            filter: 'blur(1.2px) saturate(85%) contrast(90%) brightness(96%)',
+            opacity: 0.92,
+            filter: 'blur(0px) saturate(90%) contrast(95%) brightness(98%)',
         };
     };
 
@@ -313,13 +306,13 @@ export default function AIAgentPage() {
                         background: 'linear-gradient(105deg, rgba(255, 248, 235, 0.08) 0%, transparent 60%)',
                         pointerEvents: 'none',
                     }} />
-                    {/* Editorial Gradient Overlay to quietly transition edges */}
+                    {/* Editorial Gradient Overlay to quietly transition edges without washing out details */}
                     <div style={{
                         position: 'absolute',
                         inset: 0,
                         background: hasSearched 
                             ? 'linear-gradient(to bottom, transparent 60%, var(--bg-primary) 100%)'
-                            : 'radial-gradient(circle at 50% 50%, rgba(245, 240, 232, 0.1) 0%, var(--bg-primary) 100%)',
+                            : 'linear-gradient(to bottom, rgba(245, 241, 231, 0.1) 0%, rgba(245, 241, 231, 0.3) 100%)',
                     }} />
                 </motion.div>
 
@@ -396,7 +389,7 @@ export default function AIAgentPage() {
                                 maxWidth: '680px',
                                 margin: hasSearched ? '0 0 16px 0' : '80px auto 28px', // Seated precisely on the countertop
                                 borderRadius: '24px',
-                                border: `1px solid ${isFocused ? 'rgba(31, 61, 43, 0.2)' : 'rgba(31, 61, 43, 0.05)'}`,
+                                border: `1px solid ${isFocused ? 'var(--accent)' : 'rgba(31, 61, 43, 0.12)'}`,
                                 background: 'rgba(247, 243, 234, 0.92)', // Tactile frosted parchment
                                 backdropFilter: 'blur(12px)',
                                 boxShadow: isFocused
@@ -465,11 +458,41 @@ export default function AIAgentPage() {
                                     )}
                                 </AnimatePresence>
                             </div>
+
+                            {/* Meaningful Contextual Guidance Inside the Search Card */}
+                            {!hasSearched && (
+                                <motion.div 
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    style={{ 
+                                        display: 'flex', 
+                                        flexDirection: 'column', 
+                                        gap: '4px', 
+                                        margin: '4px 0 6px', 
+                                        padding: '10px 12px', 
+                                        background: 'rgba(31, 61, 43, 0.03)', 
+                                        borderRadius: '12px', 
+                                        border: '1px solid rgba(31, 61, 43, 0.04)',
+                                        overflow: 'hidden'
+                                    }}
+                                >
+                                    <span style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                        💡 Suggested Recipe Queries
+                                    </span>
+                                    <p style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
+                                        List items you have (e.g. <i>&quot;I have potatoes and beans&quot;</i>) or request a specific goal (<i>&quot;Healthy dinner for two under ₹400&quot;</i>) to find nearby inventories.
+                                    </p>
+                                </motion.div>
+                            )}
+
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', borderTop: '1px solid rgba(28, 27, 25, 0.04)', paddingTop: '10px' }}>
                                 <div style={{ display: 'flex', gap: '8px' }}>
                                     {loading && transitionStage === 'loading' && (
                                         <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                                            {getLoadingMessage()}
+                                            {loadingStep === 0 ? 'Analyzing Request...' :
+                                             loadingStep === 1 ? 'Locating Stores...' :
+                                             loadingStep === 2 ? 'Verifying Stock...' :
+                                             loadingStep === 3 ? 'Comparing Prices...' : 'Matching Ingredients...'}
                                         </span>
                                     )}
                                 </div>
@@ -511,20 +534,7 @@ export default function AIAgentPage() {
                                                 key={group.name}
                                                 type="button"
                                                 onClick={() => setSuggestionGroupIndex(idx)}
-                                                style={{
-                                                    background: 'transparent',
-                                                    border: 'none',
-                                                    fontSize: '0.72rem',
-                                                    fontFamily: 'var(--font-mono)',
-                                                    fontWeight: 600,
-                                                    letterSpacing: '0.05em',
-                                                    textTransform: 'uppercase',
-                                                    color: suggestionGroupIndex === idx ? 'var(--accent)' : 'var(--text-muted)',
-                                                    cursor: 'pointer',
-                                                    padding: '4px 0',
-                                                    borderBottom: suggestionGroupIndex === idx ? '1px solid var(--accent)' : '1px solid transparent',
-                                                    transition: 'color 0.2s, border-color 0.2s',
-                                                }}
+                                                className={`ai-category-tab ${suggestionGroupIndex === idx ? 'active' : ''}`}
                                             >
                                                 {group.name}
                                             </button>
@@ -551,6 +561,43 @@ export default function AIAgentPage() {
                                             ))}
                                         </motion.div>
                                     </AnimatePresence>
+
+                                    {/* Tasteful supporting content: Trending Meal Plans */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.15 }}
+                                        style={{ width: '100%', maxWidth: '600px', marginTop: '40px', borderTop: '1px solid rgba(31, 61, 43, 0.08)', paddingTop: '28px' }}
+                                    >
+                                        <h3 style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
+                                            Trending Meal Plans
+                                        </h3>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                                            {[
+                                                { title: "High-Protein Weekday Prep", desc: "Eggs, avocados, spinach & chicken breasts", prompt: "High protein meal prep for the week under ₹1200" },
+                                                { title: "Quick 15-Min Dinner", desc: "Easy garlic noodles, tofu, and broccoli", prompt: "15 min quick dinner for two" },
+                                                { title: "Cozy Monsoon Soups", desc: "Hot tomato lentil soup with sourdough bread", prompt: "Warm comfort soup and bread for tonight" },
+                                                { title: "Weekend Brunch Platter", desc: "Pancakes, fresh fruits, and single origin honey", prompt: "Sweet weekend brunch ingredients for 4 people" }
+                                            ].map(intent => (
+                                                <div
+                                                    key={intent.title}
+                                                    onClick={() => handleSuggestionClick(intent.prompt)}
+                                                    style={{
+                                                        padding: '14px',
+                                                        background: 'rgba(252, 251, 248, 0.85)',
+                                                        border: '1px solid rgba(31, 61, 43, 0.06)',
+                                                        borderRadius: '16px',
+                                                        cursor: 'pointer',
+                                                        textAlign: 'left',
+                                                    }}
+                                                    className="shop-intent-card"
+                                                >
+                                                    <div style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--accent)', marginBottom: '3px' }}>{intent.title}</div>
+                                                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', lineHeight: '1.35' }}>{intent.desc}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </motion.div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -605,31 +652,113 @@ export default function AIAgentPage() {
                         <AnimatePresence>
                             {loading && transitionStage === 'loading' && (
                                 <motion.div
-                                    initial={{ opacity: 0, y: 8 }}
+                                    initial={{ opacity: 0, y: 12 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -8 }}
-                                    transition={{ duration: 0.25 }}
-                                    style={{ textAlign: 'center', padding: '48px 0', width: '100%' }}
+                                    exit={{ opacity: 0, y: -12 }}
+                                    transition={{ duration: 0.3 }}
+                                    style={{ width: '100%', maxWidth: '680px', marginTop: '36px', display: 'flex', flexDirection: 'column', gap: '32px' }}
                                 >
-                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '16px' }}>
-                                        {[0, 1, 2, 3].map(i => (
-                                            <div
-                                                key={i}
-                                                className="ai-thinking-dot"
-                                                style={{
-                                                    width: '6px',
-                                                    height: '6px',
-                                                    animationDelay: `${i * 0.15}s`,
-                                                    background: 'var(--accent)',
-                                                }}
-                                            />
-                                        ))}
+                                    {/* Multi-step progress list showing AI reasoning */}
+                                    <div style={{ background: '#FCFBF8', border: '1px solid rgba(31, 61, 43, 0.06)', borderRadius: '24px', padding: '24px 32px', boxShadow: '0 8px 30px rgba(31, 61, 43, 0.015)' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', borderBottom: '1px solid rgba(31, 61, 43, 0.05)', paddingBottom: '12px' }}>
+                                            <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                                                AI Reasoning Process
+                                            </span>
+                                            <div style={{ display: 'flex', gap: '4px' }}>
+                                                {[0, 1, 2, 3].map(i => (
+                                                    <div
+                                                        key={i}
+                                                        className="ai-thinking-dot"
+                                                        style={{
+                                                            width: '4px',
+                                                            height: '4px',
+                                                            animationDelay: `${i * 0.15}s`,
+                                                            background: 'var(--accent)',
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                            {[
+                                                { step: 0, label: "Understanding request & intent", detail: `Detected: "${prompt}"` },
+                                                { step: 1, label: "Locating nearby store coordinates", detail: "Found 4 stores in delivery radius" },
+                                                { step: 2, label: "Scanning inventory stock levels", detail: "Searching categories: Produce, Grains, Dairy" },
+                                                { step: 3, label: "Optimizing price & combinations", detail: "Sourcing lowest cost alternatives" },
+                                                { step: 4, label: "Finalizing suggested cart matches", detail: "Selecting optimal pack quantities" }
+                                            ].map((item, index) => {
+                                                const isCompleted = loadingStep > item.step;
+                                                const isActive = loadingStep === item.step;
+                                                return (
+                                                    <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', opacity: isCompleted || isActive ? 1 : 0.35, transition: 'opacity 0.2s ease' }}>
+                                                        <div style={{
+                                                            width: '18px', height: '18px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                            border: isCompleted ? 'none' : '1.5px solid var(--accent)',
+                                                            background: isCompleted ? 'var(--accent)' : (isActive ? 'rgba(31, 61, 43, 0.08)' : 'transparent'),
+                                                            color: isCompleted ? '#F5F0E8' : 'var(--accent)',
+                                                            fontSize: '0.65rem', fontWeight: 600, fontFamily: 'var(--font-mono)',
+                                                            transition: 'all 0.2s ease',
+                                                            flexShrink: 0,
+                                                            marginTop: '2px'
+                                                        }}>
+                                                            {isCompleted ? "✓" : (isActive ? "●" : "")}
+                                                        </div>
+                                                        <div style={{ flex: 1 }}>
+                                                            <div style={{ fontSize: '0.85rem', fontWeight: isActive ? 600 : 500, color: 'var(--text-primary)', transition: 'font-weight 0.2s ease' }}>
+                                                                {item.label}
+                                                            </div>
+                                                            {(isCompleted || isActive) && item.detail && (
+                                                                <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+                                                                    {item.detail}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
-                                    <p style={{ fontSize: '0.9rem', fontWeight: 500, fontFamily: 'var(--font-display)', marginBottom: '8px', color: 'var(--accent)' }}>
-                                        {getLoadingMessage()}
-                                    </p>
-                                    <div style={{ maxWidth: '240px', margin: '0 auto', overflow: 'hidden', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '999px', height: '3px' }}>
-                                        <div className="inference-progress" style={{ height: '100%', width: '60%', background: 'var(--accent)', borderRadius: '999px' }} />
+
+                                    {/* Product Skeleton Cards */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                        <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px', paddingLeft: '8px' }}>
+                                            Preparing items…
+                                        </div>
+                                        {[1, 2, 3].map(idx => (
+                                            <div
+                                                key={idx}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    gap: '16px',
+                                                    padding: '12px 16px',
+                                                    border: '1px solid rgba(31, 61, 43, 0.04)',
+                                                    borderRadius: '16px',
+                                                    background: '#FCFBF8',
+                                                    opacity: 0.8 - (idx * 0.15),
+                                                }}
+                                            >
+                                                {/* Checkbox Skeleton */}
+                                                <div className="skeleton-pulse" style={{ width: 16, height: 16, borderRadius: '4px', flexShrink: 0 }} />
+                                                
+                                                {/* Image Skeleton */}
+                                                <div className="skeleton-pulse" style={{ width: 44, height: 44, borderRadius: '6px', flexShrink: 0 }} />
+                                                
+                                                {/* Content Skeleton */}
+                                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                    <div className="skeleton-pulse" style={{ width: '45%', height: '12px', borderRadius: '4px' }} />
+                                                    <div className="skeleton-pulse" style={{ width: '70%', height: '8px', borderRadius: '3px' }} />
+                                                </div>
+                                                
+                                                {/* Price Skeleton */}
+                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', flexShrink: 0 }}>
+                                                    <div className="skeleton-pulse" style={{ width: '50px', height: '12px', borderRadius: '4px' }} />
+                                                    <div className="skeleton-pulse" style={{ width: '35px', height: '8px', borderRadius: '3px' }} />
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </motion.div>
                             )}
